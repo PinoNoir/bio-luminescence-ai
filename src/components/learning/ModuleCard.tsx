@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { useState } from 'react';
+import { motion } from 'motion/react';
 import { 
   BookOpen, 
   Clock, 
@@ -22,7 +22,7 @@ interface ModuleCardProps {
   onContinue?: (module: LearningModule) => void;
 }
 
-export function ModuleCard({ 
+function ModuleCard({ 
   module, 
   userProgress, 
   isLocked = false, 

@@ -8,7 +8,7 @@ import {
 } from '@tanstack/react-router'
 import type { ErrorComponentProps } from '@tanstack/react-router'
 
-export function DefaultCatchBoundary({ error }: ErrorComponentProps) {
+function DefaultCatchBoundary({ error }: ErrorComponentProps) {
   const router = useRouter()
   const isRoot = useMatch({
     strict: false,
@@ -40,7 +40,7 @@ export function DefaultCatchBoundary({ error }: ErrorComponentProps) {
           <Link
             to="/home"
             className={`px-2 py-1 bg-gray-600 dark:bg-gray-700 rounded text-white uppercase font-extrabold`}
-            onClick={(e) => {
+            onClick={(e: React.MouseEvent) => {
               e.preventDefault()
               window.history.back()
             }}
@@ -52,3 +52,5 @@ export function DefaultCatchBoundary({ error }: ErrorComponentProps) {
     </div>
   )
 }
+
+export default DefaultCatchBoundary;

@@ -1,47 +1,40 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { useState, useEffect } from 'react';
 import { Link, useLocation } from '@tanstack/react-router';
 import { 
   Home, 
-  Search, 
-  BookOpen, 
-  Compass, 
   User, 
-  Settings,
   Menu,
   X,
+  Zap,
+  Search,
+  Compass,
+  BookOpen,
   Waves,
-  Zap
+  Settings
 } from 'lucide-react';
 import { cn } from '~/lib/utils';
+import { useAuth } from '~/hooks/useAuth';
 
 const navigationItems = [
   {
     id: 'home',
     label: 'Home',
-    href: '/',
+    href: '/home',
     icon: Home,
     depth: 0
   },
   {
     id: 'explore',
-    label: 'Explore Species',
+    label: 'Explore',
     href: '/explore',
     icon: Compass,
     depth: 0
   },
   {
     id: 'learn',
-    label: 'Learning Modules',
+    label: 'Learn',
     href: '/learn',
     icon: BookOpen,
-    depth: 0
-  },
-  {
-    id: 'ocean',
-    label: '3D Ocean',
-    href: '/ocean',
-    icon: Waves,
     depth: 0
   },
   {
@@ -50,84 +43,60 @@ const navigationItems = [
     href: '/search',
     icon: Search,
     depth: 0
-  }
-];
-
-const userItems = [
-  {
-    id: 'profile',
-    label: 'Profile',
-    href: '/profile',
-    icon: User
   },
   {
-    id: 'settings',
-    label: 'Settings',
-    href: '/settings',
-    icon: Settings
+    id: 'ocean',
+    label: 'Ocean 3D',
+    href: '/ocean',
+    icon: Waves,
+    depth: 0
   }
 ];
 
-export function Navigation() {
+function Navigation() {
+  const { user, signOut, isAuthenticated } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
   
   const isActive = (href: string) => {
-    if (href === '/') {
-      return location.pathname === '/';
-    }
     return location.pathname.startsWith(href);
   };
 
-  const navVariants = {
-    hidden: { opacity: 0, y: -20 },
-    visible: { 
-      opacity: 1, 
-      y: 0,
-      transition: { duration: 0.5, staggerChildren: 0.1 }
-    }
-  };
+  // Handle scroll effect
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      setIsScrolled(scrollTop > 20);
+    };
 
-  const itemVariants = {
-    hidden: { opacity: 0, x: -20 },
-    visible: { opacity: 1, x: 0 }
-  };
-
-  const mobileMenuVariants = {
-    hidden: { 
-      opacity: 0, 
-      x: '-100%',
-      transition: { duration: 0.3 }
-    },
-    visible: { 
-      opacity: 1, 
-      x: 0,
-      transition: { duration: 0.3, staggerChildren: 0.1 }
-    }
-  };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
     <>
       {/* Desktop Navigation */}
-      <motion.nav 
-        className="hidden lg:flex fixed top-0 left-0 right-0 z-50 bg-abyss/95 backdrop-blur-sm border-b border-white/10"
-        variants={navVariants}
-        initial="hidden"
-        animate="visible"
+      <nav 
+        className={cn(
+          "hidden lg:flex fixed top-0 left-0 right-0 z-50 transition-all duration-300",
+          isScrolled 
+            ? "bg-abyss/95 backdrop-blur-sm border-b border-white/10 shadow-lg"
+            : "bg-transparent"
+        )}
       >
         <div className="max-w-7xl mx-auto w-full px-6">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
-            <motion.div 
+            <div 
               className="flex items-center space-x-3"
-              variants={itemVariants}
             >
               <div className="relative">
-                <Zap className="w-8 h-8 text-bio-blue animate-bio-pulse" />
+                <Zap className="w-8 h-8 text-bio-blue" />
                 <div className="absolute inset-0 w-8 h-8 bg-bio-blue/20 rounded-full blur-lg animate-bio-pulse" />
               </div>
-              <span className="text-xl font-bold text-white">DeepGlow</span>
-            </motion.div>
+              <span className="text-xl font-bold text-white">Bio Glow</span>
+            </div>
             
             {/* Main Navigation */}
             <div className="flex items-center space-x-8">
@@ -136,11 +105,11 @@ export function Navigation() {
                 const active = isActive(item.href);
                 
                 return (
-                  <motion.div key={item.id} variants={itemVariants}>
+                  <div key={item.id} className="relative">
                     <Link
                       to={item.href}
                       className={cn(
-                        'flex items-center space-x-2 px-4 py-2 rounded-lg transition-all duration-200 group',
+                        'flex items-center space-x-2 px-4 py-2 rounded-lg transition-all duration-200 group relative',
                         active 
                           ? 'bg-bio-blue/20 text-bio-blue'
                           : 'text-gray-300 hover:text-white hover:bg-white/5'
@@ -148,66 +117,86 @@ export function Navigation() {
                     >
                       <Icon className={cn(
                         'w-5 h-5 transition-all duration-200',
-                        active && 'animate-bio-pulse'
+                        active
                       )} />
                       <span className="font-medium">{item.label}</span>
-                      
-                      {/* Active indicator */}
-                      {active && (
-                        <motion.div
-                          className="absolute -bottom-1 left-1/2 w-1 h-1 bg-bio-blue rounded-full"
-                          initial={{ scale: 0 }}
-                          animate={{ scale: 1 }}
-                          layoutId="activeIndicator"
-                        />
-                      )}
                     </Link>
-                  </motion.div>
+                  </div>
                 );
               })}
             </div>
             
             {/* User Menu */}
-            <motion.div 
+            <div 
               className="flex items-center space-x-4"
-              variants={itemVariants}
             >
-              {userItems.map((item) => {
-                const Icon = item.icon;
-                const active = isActive(item.href);
-                
-                return (
-                  <Link
-                    key={item.id}
-                    to={item.href}
-                    className={cn(
-                      'p-2 rounded-lg transition-colors',
-                      active 
-                        ? 'bg-bio-blue/20 text-bio-blue'
-                        : 'text-gray-400 hover:text-white hover:bg-white/5'
-                    )}
+              {isAuthenticated ? (
+                <div className="flex items-center space-x-4">
+                  <span className="text-gray-300">{user?.email}</span>
+                  
+                  {/* User Profile & Settings Links */}
+                  <div className="flex items-center space-x-2">
+                    <Link
+                      to="/profile"
+                      className="p-2 text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
+                      title="Profile"
+                    >
+                      <User className="w-4 h-4" />
+                    </Link>
+                    <Link
+                      to="/settings"
+                      className="p-2 text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
+                      title="Settings"
+                    >
+                      <Settings className="w-4 h-4" />
+                    </Link>
+                  </div>
+                  
+                  <button
+                    onClick={() => signOut.mutate()}
+                    className="px-4 py-2 bg-red-600/20 hover:bg-red-600/30 text-red-400 rounded-lg transition-colors font-medium"
                   >
-                    <Icon className="w-5 h-5" />
+                    Sign Out
+                  </button>
+                </div>
+              ) : (
+                <div className="flex items-center space-x-2">
+                  <Link
+                    to="/signup"
+                    className="px-3 py-2 text-bio-blue hover:text-bio-cyan transition-colors font-medium"
+                  >
+                    Sign Up
                   </Link>
-                );
-              })}
-            </motion.div>
+                  <Link
+                    to="/login"
+                    className="px-4 py-2 bg-bio-blue/20 hover:bg-bio-blue/30 text-bio-blue rounded-lg transition-colors font-medium"
+                  >
+                    Sign In
+                  </Link>
+                </div>
+              )}
+            </div>
           </div>
         </div>
-      </motion.nav>
+      </nav>
       
       {/* Mobile Navigation */}
       <div className="lg:hidden">
         {/* Mobile Header */}
-        <div className="fixed top-0 left-0 right-0 z-50 bg-abyss/95 backdrop-blur-sm border-b border-white/10">
+        <div className={cn(
+          "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
+          isScrolled 
+            ? "bg-abyss/95 backdrop-blur-sm border-b border-white/10 shadow-lg"
+            : "bg-transparent"
+        )}>
           <div className="flex items-center justify-between h-16 px-4">
             {/* Logo */}
             <div className="flex items-center space-x-3">
               <div className="relative">
-                <Zap className="w-6 h-6 text-bio-blue animate-bio-pulse" />
-                <div className="absolute inset-0 w-6 h-6 bg-bio-blue/20 rounded-full blur-lg animate-bio-pulse" />
+                <Zap className="w-6 h-6 text-bio-blue" />
+                <div className="absolute inset-0 w-6 h-6 bg-bio-blue/20 rounded-full blur-lg" />
               </div>
-              <span className="text-lg font-bold text-white">DeepGlow</span>
+              <span className="text-lg font-bold text-white">Bio Glow</span>
             </div>
             
             {/* Menu Toggle */}
@@ -225,24 +214,16 @@ export function Navigation() {
         </div>
         
         {/* Mobile Menu Overlay */}
-        <AnimatePresence>
-          {isMobileMenuOpen && (
-            <>
-              <motion.div
-                className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                onClick={() => setIsMobileMenuOpen(false)}
-              />
-              
-              <motion.div
-                className="fixed top-16 left-0 bottom-0 z-50 w-80 bg-abyss/95 backdrop-blur-sm border-r border-white/10"
-                variants={mobileMenuVariants}
-                initial="hidden"
-                animate="visible"
-                exit="hidden"
-              >
+        {isMobileMenuOpen && (
+          <>
+            <div
+              className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm"
+              onClick={() => setIsMobileMenuOpen(false)}
+            />
+            
+            <div
+              className="fixed top-16 left-0 bottom-0 z-50 w-80 bg-abyss/95 backdrop-blur-sm border-r border-white/10"
+            >
                 <div className="p-6 space-y-6">
                   {/* Main Navigation */}
                   <div>
@@ -255,7 +236,7 @@ export function Navigation() {
                         const active = isActive(item.href);
                         
                         return (
-                          <motion.div key={item.id} variants={itemVariants}>
+                          <div key={item.id}>
                             <Link
                               to={item.href}
                               className={cn(
@@ -272,7 +253,7 @@ export function Navigation() {
                               )} />
                               <span className="font-medium">{item.label}</span>
                             </Link>
-                          </motion.div>
+                          </div>
                         );
                       })}
                     </div>
@@ -284,38 +265,71 @@ export function Navigation() {
                       Account
                     </h3>
                     <div className="space-y-2">
-                      {userItems.map((item) => {
-                        const Icon = item.icon;
-                        const active = isActive(item.href);
-                        
-                        return (
-                          <motion.div key={item.id} variants={itemVariants}>
-                            <Link
-                              to={item.href}
-                              className={cn(
-                                'flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors',
-                                active 
-                                  ? 'bg-bio-blue/20 text-bio-blue'
-                                  : 'text-gray-300 hover:text-white hover:bg-white/5'
-                              )}
-                              onClick={() => setIsMobileMenuOpen(false)}
-                            >
-                              <Icon className="w-5 h-5" />
-                              <span className="font-medium">{item.label}</span>
-                            </Link>
-                          </motion.div>
-                        );
-                      })}
+                      {isAuthenticated ? (
+                        <div className="space-y-2">
+                          <div className="px-4 py-3 text-gray-300">
+                            {user?.email}
+                          </div>
+                          
+                          {/* Profile & Settings Links */}
+                          <Link
+                            to="/profile"
+                            className="flex items-center space-x-3 px-4 py-3 text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
+                            onClick={() => setIsMobileMenuOpen(false)}
+                          >
+                            <User className="w-5 h-5" />
+                            <span className="font-medium">Profile</span>
+                          </Link>
+                          <Link
+                            to="/settings"
+                            className="flex items-center space-x-3 px-4 py-3 text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
+                            onClick={() => setIsMobileMenuOpen(false)}
+                          >
+                            <Settings className="w-5 h-5" />
+                            <span className="font-medium">Settings</span>
+                          </Link>
+                          
+                          <button
+                            onClick={() => {
+                              signOut.mutate();
+                              setIsMobileMenuOpen(false);
+                            }}
+                            className="w-full flex items-center space-x-3 px-4 py-3 bg-red-600/20 hover:bg-red-600/30 text-red-400 rounded-lg transition-colors font-medium"
+                          >
+                            <User className="w-5 h-5" />
+                            <span className="font-medium">Sign Out</span>
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="space-y-2">
+                          <Link
+                            to="/signup"
+                            className="flex items-center space-x-3 px-4 py-3 text-bio-blue hover:text-bio-cyan rounded-lg transition-colors font-medium"
+                            onClick={() => setIsMobileMenuOpen(false)}
+                          >
+                            <User className="w-5 h-5" />
+                            <span className="font-medium">Sign Up</span>
+                          </Link>
+                          <Link
+                            to="/login"
+                            className="flex items-center space-x-3 px-4 py-3 bg-bio-blue/20 hover:bg-bio-blue/30 text-bio-blue rounded-lg transition-colors font-medium"
+                            onClick={() => setIsMobileMenuOpen(false)}
+                          >
+                            <User className="w-5 h-5" />
+                            <span className="font-medium">Sign In</span>
+                          </Link>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             </>
           )}
-        </AnimatePresence>
-      </div>
-    </>
-  );
-}
+        </div>
+      </>
+    );
+  }
 
 export default Navigation;
+

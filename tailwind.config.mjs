@@ -14,6 +14,7 @@ export default {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         // Bioluminescent color palette
+        "dark-bio-blue": "#5588A3",
         "bio-blue": "#00E5FF",
         "bio-green": "#76FF03",
         "bio-pink": "#E91E63",
@@ -74,19 +75,43 @@ export default {
         "bio-pulse": {
           "0%, 100%": { 
             opacity: "1",
-            boxShadow: "0 0 20px currentColor"
+            boxShadow: "0 0 8px currentColor"
           },
           "50%": { 
-            opacity: "0.7",
-            boxShadow: "0 0 40px currentColor"
+            opacity: "0.8",
+            boxShadow: "0 0 16px currentColor"
           },
         },
         "bio-glow": {
           "0%, 100%": { 
-            textShadow: "0 0 10px currentColor, 0 0 20px currentColor, 0 0 30px currentColor"
+            textShadow: "0 0 6px currentColor, 0 0 12px currentColor"
           },
           "50%": { 
-            textShadow: "0 0 5px currentColor, 0 0 10px currentColor, 0 0 15px currentColor"
+            textShadow: "0 0 3px currentColor, 0 0 8px currentColor"
+          },
+        },
+        "bio-glow-subtle": {
+          "0%, 100%": { 
+            textShadow: "0 0 4px currentColor, 0 0 8px currentColor"
+          },
+          "50%": { 
+            textShadow: "0 0 2px currentColor, 0 0 6px currentColor"
+          },
+        },
+        "bio-glow-button": {
+          "0%, 100%": { 
+            boxShadow: "0 0 8px currentColor, 0 0 16px currentColor"
+          },
+          "50%": { 
+            boxShadow: "0 0 4px currentColor, 0 0 12px currentColor"
+          },
+        },
+        "bio-glow-minimal": {
+          "0%, 100%": { 
+            textShadow: "0 0 2px currentColor, 0 0 4px currentColor"
+          },
+          "50%": { 
+            textShadow: "0 0 1px currentColor, 0 0 3px currentColor"
           },
         },
         "float": {

@@ -1,23 +1,14 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState } from 'react';
 import { 
   ArrowLeft, 
   Zap, 
   MapPin, 
   Ruler, 
-  Calendar, 
-  User, 
   Lightbulb,
-  Camera,
-  Play,
-  Box,
   ChevronDown,
   ChevronUp,
-  Heart,
-  Share2
 } from 'lucide-react';
 import { BioluminescentSpecies } from '~/types';
-import { cn } from '~/lib/utils';
 
 interface SpeciesDetailProps {
   species: BioluminescentSpecies;
@@ -25,10 +16,8 @@ interface SpeciesDetailProps {
   onStartLearning?: () => void;
 }
 
-export function SpeciesDetail({ species, onBack, onStartLearning }: SpeciesDetailProps) {
-  const [activeTab, setActiveTab] = useState<'overview' | 'biology' | 'habitat' | 'media'>('overview');
+function SpeciesDetail({ species, onBack, onStartLearning }: SpeciesDetailProps) {
   const [showFullFacts, setShowFullFacts] = useState(false);
-  const [isFavorited, setIsFavorited] = useState(false);
 
   const glowColor = species.lightColor || '#00E5FF';
 
@@ -56,10 +45,8 @@ export function SpeciesDetail({ species, onBack, onStartLearning }: SpeciesDetai
         </button>
         
         <div className="absolute bottom-6 left-6 right-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
+          <div
+            className="animate-fade-in-up"
           >
             <h1 className="text-4xl font-bold text-white mb-2">
               {species.commonName || species.scientificname}
@@ -78,7 +65,7 @@ export function SpeciesDetail({ species, onBack, onStartLearning }: SpeciesDetai
                 Start Learning Journey
               </button>
             )}
-          </motion.div>
+          </div>
         </div>
       </div>
 

@@ -70,7 +70,7 @@ export interface DepthRange {
 
 export interface BioluminescentSpecies extends AphiaRecord {
   id: string;
-  commonName?: string;
+  commonName: string; // Made required
   bioluminescenceType: BioluminescenceType[];
   depthRange: DepthRange;
   lightColor: string; // Hex color of bioluminescence

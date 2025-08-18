@@ -10,17 +10,40 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SignupRouteImport } from './routes/signup'
+import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as SearchRouteImport } from './routes/search'
+import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as OceanRouteImport } from './routes/ocean'
 import { Route as LogoutRouteImport } from './routes/logout'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as LearnRouteImport } from './routes/learn'
 import { Route as HomeRouteImport } from './routes/home'
-import { Route as AuthedRouteImport } from './routes/_authed'
-import { Route as AuthedPostsRouteImport } from './routes/_authed/posts'
-import { Route as AuthedPostsIndexRouteImport } from './routes/_authed/posts.index'
-import { Route as AuthedPostsPostIdRouteImport } from './routes/_authed/posts.$postId'
+import { Route as ExploreRouteImport } from './routes/explore'
+import { Route as IndexRouteImport } from './routes/index'
 
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
   path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SearchRoute = SearchRouteImport.update({
+  id: '/search',
+  path: '/search',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OceanRoute = OceanRouteImport.update({
+  id: '/ocean',
+  path: '/ocean',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LogoutRoute = LogoutRouteImport.update({
@@ -33,88 +56,120 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LearnRoute = LearnRouteImport.update({
+  id: '/learn',
+  path: '/learn',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const HomeRoute = HomeRouteImport.update({
   id: '/home',
   path: '/home',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthedRoute = AuthedRouteImport.update({
-  id: '/_authed',
+const ExploreRoute = ExploreRouteImport.update({
+  id: '/explore',
+  path: '/explore',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthedPostsRoute = AuthedPostsRouteImport.update({
-  id: '/posts',
-  path: '/posts',
-  getParentRoute: () => AuthedRoute,
-} as any)
-const AuthedPostsIndexRoute = AuthedPostsIndexRouteImport.update({
+const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => AuthedPostsRoute,
-} as any)
-const AuthedPostsPostIdRoute = AuthedPostsPostIdRouteImport.update({
-  id: '/$postId',
-  path: '/$postId',
-  getParentRoute: () => AuthedPostsRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
+  '/': typeof IndexRoute
+  '/explore': typeof ExploreRoute
   '/home': typeof HomeRoute
+  '/learn': typeof LearnRoute
   '/login': typeof LoginRoute
   '/logout': typeof LogoutRoute
+  '/ocean': typeof OceanRoute
+  '/profile': typeof ProfileRoute
+  '/search': typeof SearchRoute
+  '/settings': typeof SettingsRoute
   '/signup': typeof SignupRoute
-  '/posts': typeof AuthedPostsRouteWithChildren
-  '/posts/$postId': typeof AuthedPostsPostIdRoute
-  '/posts/': typeof AuthedPostsIndexRoute
 }
 export interface FileRoutesByTo {
+  '/': typeof IndexRoute
+  '/explore': typeof ExploreRoute
   '/home': typeof HomeRoute
+  '/learn': typeof LearnRoute
   '/login': typeof LoginRoute
   '/logout': typeof LogoutRoute
+  '/ocean': typeof OceanRoute
+  '/profile': typeof ProfileRoute
+  '/search': typeof SearchRoute
+  '/settings': typeof SettingsRoute
   '/signup': typeof SignupRoute
-  '/posts/$postId': typeof AuthedPostsPostIdRoute
-  '/posts': typeof AuthedPostsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/_authed': typeof AuthedRouteWithChildren
+  '/': typeof IndexRoute
+  '/explore': typeof ExploreRoute
   '/home': typeof HomeRoute
+  '/learn': typeof LearnRoute
   '/login': typeof LoginRoute
   '/logout': typeof LogoutRoute
+  '/ocean': typeof OceanRoute
+  '/profile': typeof ProfileRoute
+  '/search': typeof SearchRoute
+  '/settings': typeof SettingsRoute
   '/signup': typeof SignupRoute
-  '/_authed/posts': typeof AuthedPostsRouteWithChildren
-  '/_authed/posts/$postId': typeof AuthedPostsPostIdRoute
-  '/_authed/posts/': typeof AuthedPostsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
+    | '/'
+    | '/explore'
     | '/home'
+    | '/learn'
     | '/login'
     | '/logout'
+    | '/ocean'
+    | '/profile'
+    | '/search'
+    | '/settings'
     | '/signup'
-    | '/posts'
-    | '/posts/$postId'
-    | '/posts/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/home' | '/login' | '/logout' | '/signup' | '/posts/$postId' | '/posts'
+  to:
+    | '/'
+    | '/explore'
+    | '/home'
+    | '/learn'
+    | '/login'
+    | '/logout'
+    | '/ocean'
+    | '/profile'
+    | '/search'
+    | '/settings'
+    | '/signup'
   id:
     | '__root__'
-    | '/_authed'
+    | '/'
+    | '/explore'
     | '/home'
+    | '/learn'
     | '/login'
     | '/logout'
+    | '/ocean'
+    | '/profile'
+    | '/search'
+    | '/settings'
     | '/signup'
-    | '/_authed/posts'
-    | '/_authed/posts/$postId'
-    | '/_authed/posts/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  AuthedRoute: typeof AuthedRouteWithChildren
+  IndexRoute: typeof IndexRoute
+  ExploreRoute: typeof ExploreRoute
   HomeRoute: typeof HomeRoute
+  LearnRoute: typeof LearnRoute
   LoginRoute: typeof LoginRoute
   LogoutRoute: typeof LogoutRoute
+  OceanRoute: typeof OceanRoute
+  ProfileRoute: typeof ProfileRoute
+  SearchRoute: typeof SearchRoute
+  SettingsRoute: typeof SettingsRoute
   SignupRoute: typeof SignupRoute
 }
 
@@ -125,6 +180,34 @@ declare module '@tanstack/react-router' {
       path: '/signup'
       fullPath: '/signup'
       preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/search': {
+      id: '/search'
+      path: '/search'
+      fullPath: '/search'
+      preLoaderRoute: typeof SearchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ocean': {
+      id: '/ocean'
+      path: '/ocean'
+      fullPath: '/ocean'
+      preLoaderRoute: typeof OceanRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/logout': {
@@ -141,6 +224,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/learn': {
+      id: '/learn'
+      path: '/learn'
+      fullPath: '/learn'
+      preLoaderRoute: typeof LearnRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/home': {
       id: '/home'
       path: '/home'
@@ -148,67 +238,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HomeRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authed': {
-      id: '/_authed'
-      path: ''
-      fullPath: ''
-      preLoaderRoute: typeof AuthedRouteImport
+    '/explore': {
+      id: '/explore'
+      path: '/explore'
+      fullPath: '/explore'
+      preLoaderRoute: typeof ExploreRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authed/posts': {
-      id: '/_authed/posts'
-      path: '/posts'
-      fullPath: '/posts'
-      preLoaderRoute: typeof AuthedPostsRouteImport
-      parentRoute: typeof AuthedRoute
-    }
-    '/_authed/posts/': {
-      id: '/_authed/posts/'
+    '/': {
+      id: '/'
       path: '/'
-      fullPath: '/posts/'
-      preLoaderRoute: typeof AuthedPostsIndexRouteImport
-      parentRoute: typeof AuthedPostsRoute
-    }
-    '/_authed/posts/$postId': {
-      id: '/_authed/posts/$postId'
-      path: '/$postId'
-      fullPath: '/posts/$postId'
-      preLoaderRoute: typeof AuthedPostsPostIdRouteImport
-      parentRoute: typeof AuthedPostsRoute
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
     }
   }
 }
 
-interface AuthedPostsRouteChildren {
-  AuthedPostsPostIdRoute: typeof AuthedPostsPostIdRoute
-  AuthedPostsIndexRoute: typeof AuthedPostsIndexRoute
-}
-
-const AuthedPostsRouteChildren: AuthedPostsRouteChildren = {
-  AuthedPostsPostIdRoute: AuthedPostsPostIdRoute,
-  AuthedPostsIndexRoute: AuthedPostsIndexRoute,
-}
-
-const AuthedPostsRouteWithChildren = AuthedPostsRoute._addFileChildren(
-  AuthedPostsRouteChildren,
-)
-
-interface AuthedRouteChildren {
-  AuthedPostsRoute: typeof AuthedPostsRouteWithChildren
-}
-
-const AuthedRouteChildren: AuthedRouteChildren = {
-  AuthedPostsRoute: AuthedPostsRouteWithChildren,
-}
-
-const AuthedRouteWithChildren =
-  AuthedRoute._addFileChildren(AuthedRouteChildren)
-
 const rootRouteChildren: RootRouteChildren = {
-  AuthedRoute: AuthedRouteWithChildren,
+  IndexRoute: IndexRoute,
+  ExploreRoute: ExploreRoute,
   HomeRoute: HomeRoute,
+  LearnRoute: LearnRoute,
   LoginRoute: LoginRoute,
   LogoutRoute: LogoutRoute,
+  OceanRoute: OceanRoute,
+  ProfileRoute: ProfileRoute,
+  SearchRoute: SearchRoute,
+  SettingsRoute: SettingsRoute,
   SignupRoute: SignupRoute,
 }
 export const routeTree = rootRouteImport
