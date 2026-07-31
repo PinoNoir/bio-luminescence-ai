@@ -53,3 +53,13 @@ There is no lint script, no test framework, and no test files in the repo. Don't
 - `pnpm start` runs `vite start`, which isn't a valid Vite CLI command — likely non-functional post-migration.
 - `routeTree.gen.ts` regeneration is not wired into the build (see Routing above) — verify new routes actually appear in that file.
 - Two conflicting import-alias schemes exist (`~/*` used in code vs `@/lib`, `@/hooks` in `components.json`) — prefer `~/`.
+
+## Agent skills
+
+### Issue tracker
+
+Issues and wayfinder maps live as markdown files under `.scratch/`. See `docs/agents/issue-tracker.md`.
+
+### Domain docs
+
+Single-context: `CONTEXT.md` + `docs/adr/` at the repo root. See `docs/agents/domain.md`.
