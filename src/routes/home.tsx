@@ -98,7 +98,7 @@ function Home() {
       <div className="pt-20 pb-16">
         <div className="max-w-7xl mx-auto px-6">
             <div
-              className="text-center mb-16"
+              className="text-center my-16"
             >
               <h1 className="text-6xl font-bold text-white mb-6">
                 Explore the{' '}
