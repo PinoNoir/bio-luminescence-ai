@@ -1,21 +1,9 @@
-// PROTOTYPE — wipe me. Throwaway data for ticket 10 (.scratch/bio-glow/issues/10-species-detail-view.md).
-// Sighting isn't a real type/table yet (ticket 06 designed the schema; nothing is built).
+import { Sighting } from '~/types';
 
-export interface MockSighting {
-  id: string;
-  submittedBy: string;
-  location: string;
-  latitude: number;
-  longitude: number;
-  depthM: number;
-  sightedAt: string;
-  notes: string;
-  photoCount: number;
-}
-
-export const mockSightings: MockSighting[] = [
+export const mockSightings: Sighting[] = [
   {
     id: 's1',
+    speciesId: '2', // Atolla wyvillei
     submittedBy: 'Dr. Elena Vasquez',
     location: 'Monterey Submarine Canyon',
     latitude: 36.7,
@@ -28,6 +16,7 @@ export const mockSightings: MockSighting[] = [
   },
   {
     id: 's2',
+    speciesId: '2',
     submittedBy: 'Kenji Osei',
     location: 'Izu-Ogasawara Trench',
     latitude: 29.3,
@@ -39,6 +28,7 @@ export const mockSightings: MockSighting[] = [
   },
   {
     id: 's3',
+    speciesId: '2',
     submittedBy: 'Dr. Elena Vasquez',
     location: 'Monterey Submarine Canyon',
     latitude: 36.68,

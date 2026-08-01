@@ -22,10 +22,12 @@ A deployed, portfolio-quality web app where marine biologists browse a biolumine
 - [Sightings and species schema](./issues/06-sightings-and-species-schema.md) — full Postgres schema (UUID PKs, flat typed columns, enum bioluminescence types, plain lat/lng) and RLS policies for both tables.
 - [Photo storage design](./issues/07-photo-storage-design.md) — single public `photos` Supabase Storage bucket, entity-id path convention, `species_photos`/`sighting_photos` gallery tables (5MB/JPEG-PNG-WebP/6-per-entity limits), RLS on `storage.objects` via `storage.foldername()` mirroring ticket 06's ownership split.
 - [Species entry flow](./issues/09-species-entry-flow.md) — hybrid: WoRMS supplies the taxonomic backbone (search-and-import), the scientist manually enters all bioluminescence-specific fields. `worms.ts`'s heuristic guessing functions are dead code under this decision, to be removed.
+- [Species detail view](./issues/10-species-detail-view.md) — "Field Specimen Card" layout wins (of 3 prototyped); folded into `SpeciesDetail.tsx` + a real `/species/$speciesId` route, wired from Home and Explore. Added a real `Sighting` type + mock data. Full 3-variant prototype preserved on `throwaway/species-detail-prototype-2026-07-31`.
 
 ## Not yet specified
 
-- Visual design direction for key screens (species catalog, species detail, sighting form, any map/geo view) — will graduate into `/prototype` tickets once the core data model and flows (tickets 06, 09, 10) are settled.
+- Visual design direction for remaining key screens (species catalog/listing, sighting form) — will graduate into `/prototype` tickets once their data model and flows are settled (ticket 09's entry flow already has a UI ticket: 11).
+- A scroll-driven "depth darkening" motion technique (background darkens + species glow intensifies as you scroll deeper) was prototyped for the species detail view (ticket 10, Variant B) and liked, but not used there — worth revisiting for a different page once one's identified as a good fit.
 - Whether Sightings get a map/geo visualization (the existing `/ocean` route was a 3D scene whose components were previously removed) and, if so, what renders it.
 - How the existing routes (`explore`, `ocean`, `search`, `profile`, `settings`) map onto the new Species + Sighting model — likely `explore`/`search` become Species/Sighting listings and `profile` shows a scientist's own Sightings, but this isn't decided.
 - Demo data seeding strategy so the deployed portfolio site looks populated on first visit (real WoRMS-sourced species vs curated sample set, sample Sightings).

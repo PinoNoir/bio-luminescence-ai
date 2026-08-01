@@ -9,7 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as PrototypeSpeciesDetailRouteImport } from './routes/prototype-species-detail'
+import { Route as SpeciesSpeciesIdRouteImport } from './routes/species.$speciesId'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as SearchRouteImport } from './routes/search'
@@ -22,9 +22,9 @@ import { Route as HomeRouteImport } from './routes/home'
 import { Route as ExploreRouteImport } from './routes/explore'
 import { Route as IndexRouteImport } from './routes/index'
 
-const PrototypeSpeciesDetailRoute = PrototypeSpeciesDetailRouteImport.update({
-  id: '/prototype-species-detail',
-  path: '/prototype-species-detail',
+const SpeciesSpeciesIdRoute = SpeciesSpeciesIdRouteImport.update({
+  id: '/species/$speciesId',
+  path: '/species/$speciesId',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SignupRoute = SignupRouteImport.update({
@@ -92,7 +92,7 @@ export interface FileRoutesByFullPath {
   '/logout': typeof LogoutRoute
   '/ocean': typeof OceanRoute
   '/profile': typeof ProfileRoute
-  '/prototype-species-detail': typeof PrototypeSpeciesDetailRoute
+  '/species/$speciesId': typeof SpeciesSpeciesIdRoute
   '/search': typeof SearchRoute
   '/settings': typeof SettingsRoute
   '/signup': typeof SignupRoute
@@ -106,7 +106,7 @@ export interface FileRoutesByTo {
   '/logout': typeof LogoutRoute
   '/ocean': typeof OceanRoute
   '/profile': typeof ProfileRoute
-  '/prototype-species-detail': typeof PrototypeSpeciesDetailRoute
+  '/species/$speciesId': typeof SpeciesSpeciesIdRoute
   '/search': typeof SearchRoute
   '/settings': typeof SettingsRoute
   '/signup': typeof SignupRoute
@@ -121,7 +121,7 @@ export interface FileRoutesById {
   '/logout': typeof LogoutRoute
   '/ocean': typeof OceanRoute
   '/profile': typeof ProfileRoute
-  '/prototype-species-detail': typeof PrototypeSpeciesDetailRoute
+  '/species/$speciesId': typeof SpeciesSpeciesIdRoute
   '/search': typeof SearchRoute
   '/settings': typeof SettingsRoute
   '/signup': typeof SignupRoute
@@ -137,7 +137,7 @@ export interface FileRouteTypes {
     | '/logout'
     | '/ocean'
     | '/profile'
-    | '/prototype-species-detail'
+    | '/species/$speciesId'
     | '/search'
     | '/settings'
     | '/signup'
@@ -151,7 +151,7 @@ export interface FileRouteTypes {
     | '/logout'
     | '/ocean'
     | '/profile'
-    | '/prototype-species-detail'
+    | '/species/$speciesId'
     | '/search'
     | '/settings'
     | '/signup'
@@ -165,7 +165,7 @@ export interface FileRouteTypes {
     | '/logout'
     | '/ocean'
     | '/profile'
-    | '/prototype-species-detail'
+    | '/species/$speciesId'
     | '/search'
     | '/settings'
     | '/signup'
@@ -180,7 +180,7 @@ export interface RootRouteChildren {
   LogoutRoute: typeof LogoutRoute
   OceanRoute: typeof OceanRoute
   ProfileRoute: typeof ProfileRoute
-  PrototypeSpeciesDetailRoute: typeof PrototypeSpeciesDetailRoute
+  SpeciesSpeciesIdRoute: typeof SpeciesSpeciesIdRoute
   SearchRoute: typeof SearchRoute
   SettingsRoute: typeof SettingsRoute
   SignupRoute: typeof SignupRoute
@@ -216,11 +216,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProfileRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/prototype-species-detail': {
-      id: '/prototype-species-detail'
-      path: '/prototype-species-detail'
-      fullPath: '/prototype-species-detail'
-      preLoaderRoute: typeof PrototypeSpeciesDetailRouteImport
+    '/species/$speciesId': {
+      id: '/species/$speciesId'
+      path: '/species/$speciesId'
+      fullPath: '/species/$speciesId'
+      preLoaderRoute: typeof SpeciesSpeciesIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/ocean': {
@@ -284,7 +284,7 @@ const rootRouteChildren: RootRouteChildren = {
   LogoutRoute: LogoutRoute,
   OceanRoute: OceanRoute,
   ProfileRoute: ProfileRoute,
-  PrototypeSpeciesDetailRoute: PrototypeSpeciesDetailRoute,
+  SpeciesSpeciesIdRoute: SpeciesSpeciesIdRoute,
   SearchRoute: SearchRoute,
   SettingsRoute: SettingsRoute,
   SignupRoute: SignupRoute,

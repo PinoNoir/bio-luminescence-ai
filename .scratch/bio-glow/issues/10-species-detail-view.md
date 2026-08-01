@@ -1,7 +1,7 @@
 # Species detail view
 
 Type: prototype
-Status: claimed
+Status: resolved
 
 Blocked by: 06
 
@@ -18,3 +18,11 @@ Three structurally different variants, live at `/prototype-species-detail?varian
 - **C — Split Lab Panel**: persistent sticky left panel with a light-pattern visualizer that actually animates according to the species' real `lightPattern` (steady/pulsing/flashing/wave — flashing and wave use custom keyframes, pulsing reuses the existing `bio-pulse`), tabbed content (Overview / Taxonomy & Biology / Sightings) on the right. Utility/tool-led, most information-dense without a giant scroll.
 
 This is HITL — needs an actual look, not just a description. Once you've picked one (or want to mix pieces from different ones), I'll fold the winner into a real `/species/$speciesId` route, capture the full variant set on a throwaway branch per the prototype skill, and close this out.
+
+## Answer
+
+**Variant A (Field Specimen Card) wins.** Folded into real code: `src/components/species/SpeciesDetail.tsx` (rewritten with A's design) rendered at the real route `src/routes/species.$speciesId.tsx`, wired up from both `home.tsx`'s and `explore.tsx`'s `SpeciesCard` clicks. Added a real `Sighting` type (`src/types/index.ts`) and mock data (`src/data/sightings/mockSightings.ts`) so the sighting log actually renders. The Fraunces/Inter/IBM Plex Mono type foundation (added for the prototype) stays as real, permanent styling.
+
+**Variant B's scroll-depth-darkening technique was explicitly liked but not applied here** — flagged for possible reuse on a different page later. Not sharp enough to ticket yet (no page named), so it's recorded as fog on the map rather than a ticket.
+
+The full three-variant prototype (A, B, C, switcher) is preserved as the primary source on `throwaway/species-detail-prototype-2026-07-31` (pushed to origin) — do not delete this branch, it's a reference artifact, not a stale feature branch.

@@ -1,149 +1,186 @@
 import { useState } from 'react';
-import { 
-  ArrowLeft, 
-  Zap, 
-  MapPin, 
-  Ruler, 
-  Lightbulb,
-  ChevronDown,
-  ChevronUp,
-} from 'lucide-react';
-import { BioluminescentSpecies } from '~/types';
+import { ArrowLeft, ChevronDown, ChevronUp } from 'lucide-react';
+import { BioluminescentSpecies, Sighting } from '~/types';
 
 interface SpeciesDetailProps {
   species: BioluminescentSpecies;
+  sightings: Sighting[];
   onBack: () => void;
-  onStartLearning?: () => void;
 }
 
-function SpeciesDetail({ species, onBack, onStartLearning }: SpeciesDetailProps) {
-  const [showFullFacts, setShowFullFacts] = useState(false);
+function DataRow({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="flex items-baseline justify-between border-b border-white/10 py-2 gap-4">
+      <span className="text-xs uppercase tracking-widest text-white/40 font-data">{label}</span>
+      <span className="text-sm text-white font-data text-right">{value}</span>
+    </div>
+  );
+}
 
-  const glowColor = species.lightColor || '#00E5FF';
+function SpeciesDetail({ species, sightings, onBack }: SpeciesDetailProps) {
+  const [showFullFacts, setShowFullFacts] = useState(false);
+  const glow = species.lightColor || '#00E5FF';
+  const visibleFacts = species.funFacts.slice(0, showFullFacts ? undefined : 4);
 
   return (
-    <div className="min-h-screen bg-ocean-gradient">
-      {/* Header with species info */}
-      <div className="relative h-80 overflow-hidden">
-        {species.imageUrl ? (
-          <img
-            src={species.imageUrl}
-            alt={species.commonName || species.scientificname}
-            className="w-full h-full object-cover"
-          />
-        ) : (
-          <div className="w-full h-full bg-gradient-to-br from-ocean-deep to-ocean-mid" />
-        )}
-        
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-        
+    <div className="min-h-screen bg-[#0B1426] pt-28 pb-24 px-6">
+      <div className="max-w-5xl mx-auto">
         <button
           onClick={onBack}
-          className="absolute top-6 left-6 p-3 bg-black/50 backdrop-blur-sm rounded-full text-white hover:bg-black/70 transition-colors"
+          className="mb-8 inline-flex items-center gap-2 text-sm text-white/50 hover:text-white transition-colors"
         >
-          <ArrowLeft className="w-6 h-6" />
+          <ArrowLeft className="w-4 h-4" />
+          Back
         </button>
-        
-        <div className="absolute bottom-6 left-6 right-6">
-          <div
-            className="animate-fade-in-up"
-          >
-            <h1 className="text-4xl font-bold text-white mb-2">
-              {species.commonName || species.scientificname}
-            </h1>
-            {species.commonName && (
-              <p className="text-xl text-gray-300 italic mb-4">
-                {species.scientificname}
-              </p>
-            )}
-            
-            {onStartLearning && (
-              <button
-                onClick={onStartLearning}
-                className="px-8 py-3 bg-bio-blue rounded-lg text-white font-semibold hover:bg-bio-cyan transition-colors animate-bio-pulse"
-              >
-                Start Learning Journey
-              </button>
-            )}
-          </div>
-        </div>
-      </div>
 
-      {/* Quick facts section */}
-      <div className="max-w-7xl mx-auto px-6 py-8">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          <div className="bg-white/5 rounded-lg p-4 text-center">
-            <Ruler className="w-6 h-6 mx-auto mb-2 text-bio-blue" />
-            <div className="text-sm text-gray-400">Size</div>
-            <div className="text-lg font-bold text-white">
-              {species.size.length} {species.size.unit}
-            </div>
-          </div>
-          
-          <div className="bg-white/5 rounded-lg p-4 text-center">
-            <MapPin className="w-6 h-6 mx-auto mb-2 text-bio-green" />
-            <div className="text-sm text-gray-400">Depth</div>
-            <div className="text-lg font-bold text-white">
-              {species.depthRange.min}-{species.depthRange.max}m
-            </div>
-          </div>
-          
-          <div className="bg-white/5 rounded-lg p-4 text-center">
-            <Zap className="w-6 h-6 mx-auto mb-2" style={{ color: glowColor }} />
-            <div className="text-sm text-gray-400">Light Type</div>
-            <div className="text-lg font-bold text-white capitalize">
-              {species.bioluminescenceType?.[0]?.replace('_', ' ')}
-            </div>
-          </div>
-          
-          <div className="bg-white/5 rounded-lg p-4 text-center">
-            <div 
-              className="w-6 h-6 mx-auto mb-2 rounded-full animate-bio-pulse"
-              style={{ backgroundColor: glowColor }}
-            />
-            <div className="text-sm text-gray-400">Pattern</div>
-            <div className="text-lg font-bold text-white capitalize">
-              {species.lightPattern}
-            </div>
-          </div>
-        </div>
-
-        {/* Fun facts */}
-        <div className="bg-white/5 rounded-lg p-6 mb-8">
-          <h3 className="text-xl font-bold text-white mb-4 flex items-center">
-            <Lightbulb className="w-6 h-6 mr-2 text-bio-pink" />
-            Fascinating Facts
-          </h3>
-          <div className="space-y-3">
-            {species.funFacts.slice(0, showFullFacts ? undefined : 3).map((fact, index) => (
-              <div key={index} className="flex items-start space-x-3">
-                <div 
-                  className="w-2 h-2 rounded-full mt-2 animate-bio-pulse"
-                  style={{ backgroundColor: glowColor }}
-                />
-                <p className="text-gray-300">{fact}</p>
-              </div>
-            ))}
-          </div>
-          {species.funFacts.length > 3 && (
-            <button
-              onClick={() => setShowFullFacts(!showFullFacts)}
-              className="mt-4 flex items-center text-bio-blue hover:text-bio-cyan transition-colors"
+        <div className="grid md:grid-cols-[360px_1fr] gap-10">
+          {/* Left column: specimen frame + data sheet */}
+          <div>
+            <div
+              className="relative aspect-square border rounded-none"
+              style={{ borderColor: `${glow}55` }}
             >
-              {showFullFacts ? (
-                <><ChevronUp className="w-4 h-4 mr-1" /> Show Less</>
-              ) : (
-                <><ChevronDown className="w-4 h-4 mr-1" /> Show More Facts</>
+              {(['-top-px -left-px', '-top-px -right-px', '-bottom-px -left-px', '-bottom-px -right-px'] as const).map(
+                (pos, i) => (
+                  <span
+                    key={i}
+                    className={`absolute ${pos} w-5 h-5 border-white/70`}
+                    style={{
+                      borderTopWidth: pos.includes('top') ? 2 : 0,
+                      borderBottomWidth: pos.includes('bottom') ? 2 : 0,
+                      borderLeftWidth: pos.includes('left') ? 2 : 0,
+                      borderRightWidth: pos.includes('right') ? 2 : 0,
+                    }}
+                  />
+                ),
               )}
-            </button>
-          )}
-        </div>
+              {species.imageUrl ? (
+                <img
+                  src={species.imageUrl}
+                  alt={species.commonName}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#0d1b2a] to-[#1a2332]">
+                  <div
+                    className="w-16 h-16 rounded-full animate-bio-pulse"
+                    style={{ backgroundColor: glow, boxShadow: `0 0 40px ${glow}` }}
+                  />
+                </div>
+              )}
+              <div className="absolute bottom-2 right-2 text-[10px] font-data text-white/50 tracking-wider">
+                SPEC. {species.AphiaID}
+              </div>
+            </div>
 
-        {/* Habitat info */}
-        <div className="bg-white/5 rounded-lg p-6">
-          <h3 className="text-xl font-bold text-white mb-4">Habitat & Diet</h3>
-          <p className="text-gray-300 mb-4">{species.habitat}</p>
-          <p className="text-gray-300">{species.diet}</p>
+            <div className="mt-6">
+              <DataRow label="AphiaID" value={String(species.AphiaID)} />
+              <DataRow label="Rank" value={species.rank} />
+              <DataRow label="Authority" value={species.authority} />
+              <DataRow
+                label="Depth range"
+                value={`${species.depthRange.min}–${species.depthRange.max} ${species.depthRange.unit}`}
+              />
+              <DataRow label="Zone" value={species.depthRange.zone} />
+              <DataRow label="Size" value={`${species.size.length} ${species.size.unit}`} />
+              <DataRow label="Light pattern" value={species.lightPattern} />
+            </div>
+          </div>
+
+          {/* Right column: identity, biology, sightings */}
+          <div>
+            <p className="text-xs uppercase tracking-[0.3em] text-white/40 font-data mb-2">
+              Field Record
+            </p>
+            <h1 className="font-display text-5xl text-white leading-[1.05]">
+              {species.commonName}
+            </h1>
+            <p className="mt-2 text-lg italic text-white/50 font-display">{species.scientificname}</p>
+
+            <div className="flex items-center gap-2 mt-6">
+              {species.bioluminescenceType.map((t) => (
+                <span
+                  key={t}
+                  className="text-xs font-data uppercase tracking-wide px-2 py-1 rounded-sm border"
+                  style={{ borderColor: `${glow}66`, color: glow }}
+                >
+                  {t.replace(/_/g, ' ')}
+                </span>
+              ))}
+            </div>
+
+            <div className="mt-8 grid sm:grid-cols-2 gap-6">
+              <div>
+                <h2 className="text-xs uppercase tracking-widest text-white/40 font-data mb-2">
+                  Habitat
+                </h2>
+                <p className="text-white/75 leading-relaxed">{species.habitat}</p>
+              </div>
+              <div>
+                <h2 className="text-xs uppercase tracking-widest text-white/40 font-data mb-2">
+                  Diet
+                </h2>
+                <p className="text-white/75 leading-relaxed">{species.diet}</p>
+              </div>
+            </div>
+
+            <div className="mt-8">
+              <h2 className="text-xs uppercase tracking-widest text-white/40 font-data mb-3">
+                Notes
+              </h2>
+              <ul className="space-y-2">
+                {visibleFacts.map((fact, i) => (
+                  <li key={i} className="flex gap-3 text-sm text-white/70">
+                    <span className="font-data text-white/30">{String(i + 1).padStart(2, '0')}</span>
+                    {fact}
+                  </li>
+                ))}
+              </ul>
+              {species.funFacts.length > 4 && (
+                <button
+                  onClick={() => setShowFullFacts(!showFullFacts)}
+                  className="mt-3 flex items-center text-sm hover:opacity-80 transition-opacity"
+                  style={{ color: glow }}
+                >
+                  {showFullFacts ? (
+                    <>
+                      <ChevronUp className="w-4 h-4 mr-1" /> Show less
+                    </>
+                  ) : (
+                    <>
+                      <ChevronDown className="w-4 h-4 mr-1" /> Show more
+                    </>
+                  )}
+                </button>
+              )}
+            </div>
+
+            {/* Sightings logbook */}
+            <div className="mt-10 border-t border-white/10 pt-6">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xs uppercase tracking-widest text-white/40 font-data">
+                  Sighting log — {sightings.length} {sightings.length === 1 ? 'entry' : 'entries'}
+                </h2>
+              </div>
+              {sightings.length === 0 ? (
+                <p className="text-sm text-white/40">No sightings logged yet for this species.</p>
+              ) : (
+                <div className="space-y-0">
+                  {sightings.map((s) => (
+                    <div
+                      key={s.id}
+                      className="grid grid-cols-[90px_70px_1fr_110px] gap-4 py-3 border-b border-white/5 text-sm font-data"
+                    >
+                      <span className="text-white/50">{s.sightedAt}</span>
+                      <span style={{ color: glow }}>{s.depthM}m</span>
+                      <span className="text-white/80 truncate">{s.location}</span>
+                      <span className="text-white/40 text-right truncate">{s.submittedBy}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </div>

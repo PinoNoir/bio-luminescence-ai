@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { motion } from 'motion/react';
 import { Search, Grid3X3, List, Zap, Compass } from 'lucide-react';
 import { mockSpecies } from '~/data';
@@ -10,6 +10,7 @@ export const Route = createFileRoute('/explore')({
 });
 
 function ExploreComponent() {
+  const navigate = useNavigate();
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedDepth, setSelectedDepth] = useState<string>('all');
@@ -184,7 +185,10 @@ function ExploreComponent() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                 >
-                  <SpeciesCard species={species} />
+                  <SpeciesCard
+                    species={species}
+                    onClick={(s) => navigate({ to: '/species/$speciesId', params: { speciesId: s.id } })}
+                  />
                 </motion.div>
               ))}
             </motion.div>
