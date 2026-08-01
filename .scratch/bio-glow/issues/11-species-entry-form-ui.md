@@ -1,7 +1,7 @@
 # Species entry form UI
 
 Type: prototype
-Status: open
+Status: claimed
 
 ## Question
 
