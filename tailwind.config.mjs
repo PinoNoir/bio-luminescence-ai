@@ -133,6 +133,9 @@ export default {
       },
       fontFamily: {
         'space': ['Space Grotesk', 'sans-serif'],
+        'display': ['Fraunces', 'serif'],
+        'sans': ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        'data': ['"IBM Plex Mono"', 'ui-monospace', 'monospace'],
       },
     },
   },
