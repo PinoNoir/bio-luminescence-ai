@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useState, useEffect } from 'react';
 import { Waves, Zap, BookOpen, Compass, Users, Award } from 'lucide-react';
 import { SpeciesCard, ModuleCard } from '~/components';
@@ -10,6 +10,7 @@ export const Route = createFileRoute('/home')({
 })
 
 function Home() {
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [speciesData, setSpeciesData] = useState<BioluminescentSpecies[]>([]);
   const [modulesData, setModulesData] = useState<LearningModule[]>([]);
@@ -34,7 +35,7 @@ function Home() {
   }, []);
 
   const handleSpeciesClick = (species: BioluminescentSpecies) => {
-    console.log('Species clicked:', species);
+    navigate({ to: '/species/$speciesId', params: { speciesId: species.id } });
   };
 
   const handleModuleStart = (module: LearningModule) => {

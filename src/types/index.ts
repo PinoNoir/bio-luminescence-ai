@@ -92,6 +92,23 @@ export interface BioluminescentSpecies extends AphiaRecord {
   updatedAt: string;
 }
 
+// A field record of a Species being encountered — see CONTEXT.md.
+// `location` is a display-only convenience label; the real schema
+// (.scratch/bio-glow/issues/06-sightings-and-species-schema.md) stores
+// only raw latitude/longitude.
+export interface Sighting {
+  id: string;
+  speciesId: string;
+  submittedBy: string;
+  location: string;
+  latitude: number;
+  longitude: number;
+  depthM: number;
+  sightedAt: string;
+  notes: string;
+  photoCount: number;
+}
+
 // Learning system types
 export interface LearningModule {
   id: string;

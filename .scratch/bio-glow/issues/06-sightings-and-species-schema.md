@@ -18,6 +18,7 @@ Decisions made while resolving this ticket (grilled one at a time):
 - **Size unit**: kept as a per-record choice (`size_length` + `size_unit` check constraint) since real specimens span mm to meters and forcing one unit isn't natural.
 - **Sighting location**: plain `latitude`/`longitude double precision` columns with range CHECKs, not PostGIS — no confirmed need for radius/proximity queries yet (map visualization is still open fog), and this upgrades to `geography(Point)` later without much pain if needed.
 - **Bioluminescence type**: native Postgres enum (`bioluminescence_type_enum`) in an array column with a GIN index, mirroring the existing TS enum — self-documents valid values at the DB level.
+- **Amended while resolving ticket 07**: dropped the `cover_photo_path` column below — it's superseded by the `species_photos`/`sighting_photos` gallery tables from ticket 07, which support multiple photos and derive a "cover" image as the lowest-`sort_order` row instead of a separate synced column.
 - **Ownership split** (amends ticket 03): Species are community-editable (any authenticated scientist can fix/improve an entry, like a shared taxon page) since they're objective taxonomy facts, not personal records. Sightings stay strictly owner-scoped for edit/delete, since "who saw this, where" is inherently personal. Species **delete** is creator-only even though edit is open, to avoid casual/accidental loss on a shared catalog — a judgment call, not explicitly asked; open to revisiting.
 
 ### Schema
@@ -47,7 +48,6 @@ create table public.species (
   size_unit text check (size_unit in ('mm','cm','m')),
   conservation_status text,
   fun_facts text[] not null default '{}',
-  cover_photo_path text,                  -- Supabase Storage path; full model in ticket 07
   created_by uuid references auth.users(id) on delete set null,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
