@@ -20,6 +20,8 @@ A deployed, portfolio-quality web app where marine biologists browse a biolumine
 - [AWS's role in the stack](./issues/04-aws-role-in-stack.md) — Supabase owns the entire backend; AWS hosts only the static frontend build.
 - [AWS hosting mechanism](./issues/08-aws-hosting-mechanism.md) — AWS Amplify Hosting: native SPA rewrite rule, guided HTTPS/custom domain, git-based CI/CD, effectively free at portfolio scale.
 - [Sightings and species schema](./issues/06-sightings-and-species-schema.md) — full Postgres schema (UUID PKs, flat typed columns, enum bioluminescence types, plain lat/lng) and RLS policies for both tables.
+- [Photo storage design](./issues/07-photo-storage-design.md) — single public `photos` Supabase Storage bucket, entity-id path convention, `species_photos`/`sighting_photos` gallery tables (5MB/JPEG-PNG-WebP/6-per-entity limits), RLS on `storage.objects` via `storage.foldername()` mirroring ticket 06's ownership split.
+- [Species entry flow](./issues/09-species-entry-flow.md) — hybrid: WoRMS supplies the taxonomic backbone (search-and-import), the scientist manually enters all bioluminescence-specific fields. `worms.ts`'s heuristic guessing functions are dead code under this decision, to be removed.
 
 ## Not yet specified
 
