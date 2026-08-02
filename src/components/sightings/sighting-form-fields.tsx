@@ -1,4 +1,3 @@
-// PROTOTYPE — wipe me. Shared input primitives for ticket 13.
 import { useState } from 'react';
 import { LocateFixed, Loader2, Camera } from 'lucide-react';
 
@@ -19,13 +18,31 @@ export function Field({ label, children, accent }: { label: string; children: Re
   );
 }
 
-export function TextInput({ value, onChange, placeholder, type = 'text' }: { value: string; onChange: (v: string) => void; placeholder?: string; type?: string }) {
+export function TextInput({
+  value,
+  onChange,
+  placeholder,
+  type = 'text',
+}: {
+  value: string;
+  onChange: (v: string) => void;
+  placeholder?: string;
+  type?: string;
+}) {
   return (
     <input type={type} value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} className={inputClass} />
   );
 }
 
-export function NumberInput({ value, onChange, placeholder }: { value: number | ''; onChange: (v: number | '') => void; placeholder?: string }) {
+export function NumberInput({
+  value,
+  onChange,
+  placeholder,
+}: {
+  value: number | '';
+  onChange: (v: number | '') => void;
+  placeholder?: string;
+}) {
   return (
     <input
       type="number"
@@ -43,13 +60,7 @@ export function TextArea({ value, onChange, rows = 3 }: { value: string; onChang
 
 // A real geolocation request (navigator.geolocation) — not mocked. Falls
 // back gracefully to manual entry if denied or unavailable.
-export function UseMyLocationButton({
-  onLocate,
-  accent,
-}: {
-  onLocate: (lat: number, lng: number) => void;
-  accent: string;
-}) {
+export function UseMyLocationButton({ onLocate, accent }: { onLocate: (lat: number, lng: number) => void; accent: string }) {
   const [state, setState] = useState<'idle' | 'locating' | 'denied' | 'unsupported'>('idle');
 
   const handleClick = () => {
@@ -80,12 +91,8 @@ export function UseMyLocationButton({
         {state === 'locating' ? <Loader2 className="w-4 h-4 animate-spin" /> : <LocateFixed className="w-4 h-4" />}
         {state === 'locating' ? 'Locating…' : 'Use my current location'}
       </button>
-      {state === 'denied' && (
-        <p className="text-xs text-white/40 mt-2">Location access denied — enter coordinates manually below.</p>
-      )}
-      {state === 'unsupported' && (
-        <p className="text-xs text-white/40 mt-2">Geolocation isn't available here — enter coordinates manually.</p>
-      )}
+      {state === 'denied' && <p className="text-xs text-white/40 mt-2">Location access denied — enter coordinates manually below.</p>}
+      {state === 'unsupported' && <p className="text-xs text-white/40 mt-2">Geolocation isn't available here — enter coordinates manually.</p>}
     </div>
   );
 }
@@ -104,9 +111,7 @@ export function PhotoAttach({ count, onChange, accent }: { count: number; onChan
         onChange={(e) => onChange(Math.min(6, count + (e.target.files?.length ?? 0)))}
       />
       <Camera className="w-5 h-5 text-white/40" />
-      <span className="text-sm text-white/50">
-        {count === 0 ? 'Attach photos (up to 6)' : `${count} photo${count === 1 ? '' : 's'} attached`}
-      </span>
+      <span className="text-sm text-white/50">{count === 0 ? 'Attach photos (up to 6)' : `${count} photo${count === 1 ? '' : 's'} attached`}</span>
       {count > 0 && (
         <button
           type="button"

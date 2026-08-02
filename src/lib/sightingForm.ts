@@ -1,6 +1,3 @@
-// PROTOTYPE — wipe me. Shared draft shape for ticket 13
-// (.scratch/bio-glow/issues/13-sighting-entry-form-ui.md).
-
 export interface SightingDraft {
   speciesId: string;
   speciesLabel: string; // display cache so the picker doesn't need a re-lookup

@@ -144,16 +144,25 @@ function Home() {
         <div className="max-w-2xl mx-auto text-center">
           <h2 className="font-display text-3xl text-white mb-4">Found something that glows?</h2>
           <p className="text-white/60 mb-8">
-            Sign in to add a new species to the catalog or fix up an existing entry — every
-            record here is community-maintained by the scientists who use it.
+            Sign in to log a field sighting, add a new species to the catalog, or fix up an
+            existing entry — every record here is community-maintained by the scientists who
+            use it.
           </p>
-          <Link
-            to="/signup"
-            className="inline-block px-8 py-3 rounded font-medium text-[#0B1426] transition-opacity hover:opacity-90"
-            style={{ backgroundColor: '#00E5FF' }}
-          >
-            Create an account
-          </Link>
+          <div className="flex flex-wrap items-center justify-center gap-4">
+            <Link
+              to="/signup"
+              className="inline-block px-8 py-3 rounded font-medium text-[#0B1426] transition-opacity hover:opacity-90"
+              style={{ backgroundColor: '#00E5FF' }}
+            >
+              Create an account
+            </Link>
+            <Link
+              to="/sightings/new"
+              className="inline-block px-8 py-3 rounded font-medium text-white/80 border border-white/15 hover:border-white/30 hover:text-white transition-colors"
+            >
+              Log a sighting
+            </Link>
+          </div>
         </div>
       </div>
     </div>

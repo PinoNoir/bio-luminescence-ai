@@ -1,30 +1,26 @@
-// PROTOTYPE — wipe me. Variant C for ticket 13: "Sighting Card Preview".
-// Split screen, mirroring ticket 11's Variant B — form on the left, a
-// live preview of the resulting sighting-log entry on the right, styled
-// like the sighting rows already rendered on the real SpeciesDetail page.
-import { BioluminescentSpecies } from '~/types';
-import { mockSpecies } from '~/data';
-import { SightingDraft } from './types';
-import SpeciesPicker from './SpeciesPicker';
-import { Field, NumberInput, TextInput, TextArea, UseMyLocationButton, PhotoAttach } from './fields';
+import { useState } from 'react';
 import { MapPin, Calendar } from 'lucide-react';
+import { BioluminescentSpecies } from '~/types';
+import { SightingDraft, emptyDraft } from '~/lib/sightingForm';
+import SpeciesPicker from './SpeciesPicker';
+import { Field, NumberInput, TextInput, TextArea, UseMyLocationButton, PhotoAttach } from './sighting-form-fields';
 
-interface VariantProps {
-  draft: SightingDraft;
-  setDraft: (d: SightingDraft) => void;
-  onSave: () => void;
+// Fixed cyan/blue accent for this page — not the per-species glow color,
+// per explicit direction while reacting to the ticket 13 prototype.
+const ACCENT = '#00E5FF';
+
+interface SightingFormProps {
+  initialSpecies?: { id: string; label: string };
+  onSubmit: (draft: SightingDraft) => void;
 }
 
 function SightingPreview({ draft }: { draft: SightingDraft }) {
-  const species = mockSpecies.find((s) => s.id === draft.speciesId);
-  const accent = species?.lightColor ?? '#00E5FF';
-
   return (
     <div className="sticky top-28">
       <p className="text-xs uppercase tracking-widest text-white/30 font-data mb-3">Preview</p>
-      <div className="border border-white/10 rounded-lg p-5" style={{ borderColor: `${accent}33` }}>
+      <div className="border rounded-lg p-5" style={{ borderColor: `${ACCENT}33` }}>
         <div className="flex items-center gap-2 mb-3">
-          <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: accent }} />
+          <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: ACCENT }} />
           <p className="text-white font-medium">{draft.speciesLabel || <span className="text-white/20">Species…</span>}</p>
         </div>
         <div className="space-y-2 text-sm font-data text-white/60">
@@ -41,17 +37,16 @@ function SightingPreview({ draft }: { draft: SightingDraft }) {
           </div>
         </div>
         {draft.notes && <p className="mt-3 text-sm text-white/70">{draft.notes}</p>}
-        <p className="mt-3 text-xs text-white/30 font-data">
-          {draft.photoCount > 0 ? `${draft.photoCount} photo${draft.photoCount === 1 ? '' : 's'}` : 'no photos yet'}
-        </p>
+        <p className="mt-3 text-xs text-white/30 font-data">{draft.photoCount > 0 ? `${draft.photoCount} photo${draft.photoCount === 1 ? '' : 's'}` : 'no photos yet'}</p>
       </div>
     </div>
   );
 }
 
-function VariantC({ draft, setDraft, onSave }: VariantProps) {
-  const species = mockSpecies.find((s) => s.id === draft.speciesId);
-  const accent = species?.lightColor ?? '#00E5FF';
+function SightingForm({ initialSpecies, onSubmit }: SightingFormProps) {
+  const [draft, setDraft] = useState<SightingDraft>(
+    initialSpecies ? { ...emptyDraft, speciesId: initialSpecies.id, speciesLabel: initialSpecies.label } : emptyDraft,
+  );
 
   const handleSelect = (species: BioluminescentSpecies) => {
     setDraft({ ...draft, speciesId: species.id, speciesLabel: species.commonName });
@@ -72,11 +67,14 @@ function VariantC({ draft, setDraft, onSave }: VariantProps) {
                   </button>
                 </div>
               ) : (
-                <SpeciesPicker onSelect={handleSelect} accent={accent} />
+                <SpeciesPicker onSelect={handleSelect} accent={ACCENT} />
               )}
             </Field>
 
-            <UseMyLocationButton accent={accent} onLocate={(lat, lng) => setDraft({ ...draft, latitude: Math.round(lat * 1000) / 1000, longitude: Math.round(lng * 1000) / 1000 })} />
+            <UseMyLocationButton
+              accent={ACCENT}
+              onLocate={(lat, lng) => setDraft({ ...draft, latitude: Math.round(lat * 1000) / 1000, longitude: Math.round(lng * 1000) / 1000 })}
+            />
 
             <div className="grid grid-cols-3 gap-3">
               <Field label="Latitude">
@@ -98,13 +96,9 @@ function VariantC({ draft, setDraft, onSave }: VariantProps) {
               <TextArea value={draft.notes} onChange={(v) => setDraft({ ...draft, notes: v })} />
             </Field>
 
-            <PhotoAttach count={draft.photoCount} onChange={(n) => setDraft({ ...draft, photoCount: n })} accent={accent} />
+            <PhotoAttach count={draft.photoCount} onChange={(n) => setDraft({ ...draft, photoCount: n })} accent={ACCENT} />
 
-            <button
-              onClick={onSave}
-              className="px-6 py-2.5 rounded font-medium text-[#0B1426] transition-opacity hover:opacity-90"
-              style={{ backgroundColor: accent }}
-            >
+            <button onClick={() => onSubmit(draft)} className="px-6 py-2.5 rounded font-medium text-[#0B1426] transition-opacity hover:opacity-90" style={{ backgroundColor: ACCENT }}>
               Log sighting
             </button>
           </div>
@@ -116,4 +110,4 @@ function VariantC({ draft, setDraft, onSave }: VariantProps) {
   );
 }
 
-export default VariantC;
+export default SightingForm;

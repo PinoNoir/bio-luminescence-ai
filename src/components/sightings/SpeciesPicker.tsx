@@ -1,6 +1,5 @@
-// PROTOTYPE — wipe me. Species picker for ticket 13 — searches the local
-// catalog (mockSpecies), not WoRMS. A Sighting always references an
-// existing cataloged Species; it doesn't create one.
+// Searches the local catalog (mockSpecies), not WoRMS. A Sighting always
+// references an existing cataloged Species; it doesn't create one.
 import { useState } from 'react';
 import { Search } from 'lucide-react';
 import { mockSpecies } from '~/data';
@@ -16,9 +15,7 @@ function SpeciesPicker({ onSelect, accent = '#00E5FF' }: SpeciesPickerProps) {
   const matches =
     term.length > 1
       ? mockSpecies.filter(
-          (s) =>
-            s.commonName.toLowerCase().includes(term.toLowerCase()) ||
-            s.scientificname.toLowerCase().includes(term.toLowerCase()),
+          (s) => s.commonName.toLowerCase().includes(term.toLowerCase()) || s.scientificname.toLowerCase().includes(term.toLowerCase()),
         )
       : [];
 
@@ -37,22 +34,10 @@ function SpeciesPicker({ onSelect, accent = '#00E5FF' }: SpeciesPickerProps) {
       </div>
       {term.length > 1 && (
         <div className="mt-2 border border-white/10 rounded divide-y divide-white/10 max-h-64 overflow-y-auto">
-          {matches.length === 0 && (
-            <p className="p-3 text-sm text-white/40">
-              Not in the catalog yet — add it first, then come back to log the sighting.
-            </p>
-          )}
+          {matches.length === 0 && <p className="p-3 text-sm text-white/40">Not in the catalog yet — add it first, then come back to log the sighting.</p>}
           {matches.map((species) => (
-            <button
-              type="button"
-              key={species.id}
-              onClick={() => onSelect(species)}
-              className="w-full flex items-center gap-3 text-left p-3 hover:bg-white/5 transition-colors"
-            >
-              <span
-                className="w-2 h-2 rounded-full flex-shrink-0"
-                style={{ backgroundColor: species.lightColor }}
-              />
+            <button type="button" key={species.id} onClick={() => onSelect(species)} className="w-full flex items-center gap-3 text-left p-3 hover:bg-white/5 transition-colors">
+              <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: species.lightColor }} />
               <div>
                 <p className="text-white">{species.commonName}</p>
                 <p className="text-xs text-white/40 font-data italic">{species.scientificname}</p>
