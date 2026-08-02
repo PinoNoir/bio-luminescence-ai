@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { ArrowLeft, ChevronDown, ChevronUp } from 'lucide-react';
+import { Link } from '@tanstack/react-router';
+import { ArrowLeft, ChevronDown, ChevronUp, Pencil } from 'lucide-react';
 import { BioluminescentSpecies, Sighting } from '~/types';
 
 interface SpeciesDetailProps {
@@ -25,13 +26,24 @@ function SpeciesDetail({ species, sightings, onBack }: SpeciesDetailProps) {
   return (
     <div className="min-h-screen bg-[#0B1426] pt-28 pb-24 px-6">
       <div className="max-w-5xl mx-auto">
-        <button
-          onClick={onBack}
-          className="mb-8 inline-flex items-center gap-2 text-sm text-white/50 hover:text-white transition-colors"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          Back
-        </button>
+        <div className="mb-8 flex items-center justify-between">
+          <button
+            onClick={onBack}
+            className="inline-flex items-center gap-2 text-sm text-white/50 hover:text-white transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Back
+          </button>
+          <Link
+            to="/species/$speciesId/edit"
+            params={{ speciesId: species.id }}
+            className="inline-flex items-center gap-2 text-sm hover:opacity-80 transition-opacity"
+            style={{ color: glow }}
+          >
+            <Pencil className="w-4 h-4" />
+            Edit
+          </Link>
+        </div>
 
         <div className="grid md:grid-cols-[360px_1fr] gap-10">
           {/* Left column: specimen frame + data sheet */}

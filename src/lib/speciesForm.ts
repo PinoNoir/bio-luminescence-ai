@@ -1,5 +1,3 @@
-// PROTOTYPE — wipe me. Shared draft shape for ticket 11
-// (.scratch/bio-glow/issues/11-species-entry-form-ui.md).
 import { BioluminescenceType, BioluminescentSpecies } from '~/types';
 
 export interface SpeciesDraft {

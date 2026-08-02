@@ -1,7 +1,5 @@
-// PROTOTYPE — wipe me. Shared input primitives for ticket 11 — atoms only,
-// not layout, so each variant stays free to structure the form differently.
 import { BioluminescenceType } from '~/types';
-import { BIOLUMINESCENCE_OPTIONS, LIGHT_COLOR_SWATCHES } from './types';
+import { BIOLUMINESCENCE_OPTIONS, LIGHT_COLOR_SWATCHES } from '~/lib/speciesForm';
 
 const inputClass =
   'w-full bg-white/5 border border-white/10 rounded px-3 py-2 text-white placeholder:text-white/30 focus:outline-none focus:border-current transition-colors';
@@ -32,12 +30,10 @@ export function TextInput({
   value,
   onChange,
   placeholder,
-  accent,
 }: {
   value: string;
   onChange: (v: string) => void;
   placeholder?: string;
-  accent?: string;
 }) {
   return (
     <input
@@ -46,9 +42,6 @@ export function TextInput({
       onChange={(e) => onChange(e.target.value)}
       placeholder={placeholder}
       className={inputClass}
-      style={{ ...(accent ? ({ '--tw-ring-color': accent } as React.CSSProperties) : {}), borderColor: undefined }}
-      onFocus={(e) => accent && (e.currentTarget.style.borderColor = accent)}
-      onBlur={(e) => (e.currentTarget.style.borderColor = '')}
     />
   );
 }

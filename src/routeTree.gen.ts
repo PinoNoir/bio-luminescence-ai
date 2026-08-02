@@ -9,7 +9,8 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as PrototypeSpeciesFormRouteImport } from './routes/prototype-species-form'
+import { Route as SpeciesNewRouteImport } from './routes/species.new'
+import { Route as SpeciesSpeciesIdEditRouteImport } from './routes/species.$speciesId.edit'
 import { Route as SpeciesSpeciesIdRouteImport } from './routes/species.$speciesId'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as SettingsRouteImport } from './routes/settings'
@@ -23,9 +24,14 @@ import { Route as HomeRouteImport } from './routes/home'
 import { Route as ExploreRouteImport } from './routes/explore'
 import { Route as IndexRouteImport } from './routes/index'
 
-const PrototypeSpeciesFormRoute = PrototypeSpeciesFormRouteImport.update({
-  id: '/prototype-species-form',
-  path: '/prototype-species-form',
+const SpeciesNewRoute = SpeciesNewRouteImport.update({
+  id: '/species/new',
+  path: '/species/new',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SpeciesSpeciesIdEditRoute = SpeciesSpeciesIdEditRouteImport.update({
+  id: '/species/$speciesId/edit',
+  path: '/species/$speciesId/edit',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SpeciesSpeciesIdRoute = SpeciesSpeciesIdRouteImport.update({
@@ -98,7 +104,8 @@ export interface FileRoutesByFullPath {
   '/logout': typeof LogoutRoute
   '/ocean': typeof OceanRoute
   '/profile': typeof ProfileRoute
-  '/prototype-species-form': typeof PrototypeSpeciesFormRoute
+  '/species/new': typeof SpeciesNewRoute
+  '/species/$speciesId/edit': typeof SpeciesSpeciesIdEditRoute
   '/species/$speciesId': typeof SpeciesSpeciesIdRoute
   '/search': typeof SearchRoute
   '/settings': typeof SettingsRoute
@@ -113,7 +120,8 @@ export interface FileRoutesByTo {
   '/logout': typeof LogoutRoute
   '/ocean': typeof OceanRoute
   '/profile': typeof ProfileRoute
-  '/prototype-species-form': typeof PrototypeSpeciesFormRoute
+  '/species/new': typeof SpeciesNewRoute
+  '/species/$speciesId/edit': typeof SpeciesSpeciesIdEditRoute
   '/species/$speciesId': typeof SpeciesSpeciesIdRoute
   '/search': typeof SearchRoute
   '/settings': typeof SettingsRoute
@@ -129,7 +137,8 @@ export interface FileRoutesById {
   '/logout': typeof LogoutRoute
   '/ocean': typeof OceanRoute
   '/profile': typeof ProfileRoute
-  '/prototype-species-form': typeof PrototypeSpeciesFormRoute
+  '/species/new': typeof SpeciesNewRoute
+  '/species/$speciesId/edit': typeof SpeciesSpeciesIdEditRoute
   '/species/$speciesId': typeof SpeciesSpeciesIdRoute
   '/search': typeof SearchRoute
   '/settings': typeof SettingsRoute
@@ -146,7 +155,8 @@ export interface FileRouteTypes {
     | '/logout'
     | '/ocean'
     | '/profile'
-    | '/prototype-species-form'
+    | '/species/new'
+    | '/species/$speciesId/edit'
     | '/species/$speciesId'
     | '/search'
     | '/settings'
@@ -161,7 +171,8 @@ export interface FileRouteTypes {
     | '/logout'
     | '/ocean'
     | '/profile'
-    | '/prototype-species-form'
+    | '/species/new'
+    | '/species/$speciesId/edit'
     | '/species/$speciesId'
     | '/search'
     | '/settings'
@@ -176,7 +187,8 @@ export interface FileRouteTypes {
     | '/logout'
     | '/ocean'
     | '/profile'
-    | '/prototype-species-form'
+    | '/species/new'
+    | '/species/$speciesId/edit'
     | '/species/$speciesId'
     | '/search'
     | '/settings'
@@ -192,7 +204,8 @@ export interface RootRouteChildren {
   LogoutRoute: typeof LogoutRoute
   OceanRoute: typeof OceanRoute
   ProfileRoute: typeof ProfileRoute
-  PrototypeSpeciesFormRoute: typeof PrototypeSpeciesFormRoute
+  SpeciesNewRoute: typeof SpeciesNewRoute
+  SpeciesSpeciesIdEditRoute: typeof SpeciesSpeciesIdEditRoute
   SpeciesSpeciesIdRoute: typeof SpeciesSpeciesIdRoute
   SearchRoute: typeof SearchRoute
   SettingsRoute: typeof SettingsRoute
@@ -229,11 +242,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProfileRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/prototype-species-form': {
-      id: '/prototype-species-form'
-      path: '/prototype-species-form'
-      fullPath: '/prototype-species-form'
-      preLoaderRoute: typeof PrototypeSpeciesFormRouteImport
+    '/species/new': {
+      id: '/species/new'
+      path: '/species/new'
+      fullPath: '/species/new'
+      preLoaderRoute: typeof SpeciesNewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/species/$speciesId/edit': {
+      id: '/species/$speciesId/edit'
+      path: '/species/$speciesId/edit'
+      fullPath: '/species/$speciesId/edit'
+      preLoaderRoute: typeof SpeciesSpeciesIdEditRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/species/$speciesId': {
@@ -304,7 +324,8 @@ const rootRouteChildren: RootRouteChildren = {
   LogoutRoute: LogoutRoute,
   OceanRoute: OceanRoute,
   ProfileRoute: ProfileRoute,
-  PrototypeSpeciesFormRoute: PrototypeSpeciesFormRoute,
+  SpeciesNewRoute: SpeciesNewRoute,
+  SpeciesSpeciesIdEditRoute: SpeciesSpeciesIdEditRoute,
   SpeciesSpeciesIdRoute: SpeciesSpeciesIdRoute,
   SearchRoute: SearchRoute,
   SettingsRoute: SettingsRoute,

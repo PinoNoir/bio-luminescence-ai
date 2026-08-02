@@ -1,11 +1,7 @@
-// PROTOTYPE — wipe me. Variant C for ticket 11: "Field Log Checklist".
-// Grouped, collapsible sections with a monospace completion counter per
-// section — a structured intake sheet, matching how a scientist actually
-// fills out field data: not necessarily linearly, but by category.
 import { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
-import { AphiaRecord } from '~/types';
-import { SpeciesDraft } from './types';
+import { AphiaRecord, BioluminescentSpecies } from '~/types';
+import { SpeciesDraft, emptyDraft, draftFromSpecies } from '~/lib/speciesForm';
 import WormsSearchField from './WormsSearchField';
 import {
   Field,
@@ -16,13 +12,12 @@ import {
   BioluminescenceTypeChips,
   ColorPicker,
   FunFactsEditor,
-} from './fields';
+} from './species-form-fields';
 
-interface VariantProps {
-  draft: SpeciesDraft;
-  setDraft: (d: SpeciesDraft) => void;
+interface SpeciesFormProps {
   mode: 'create' | 'edit';
-  onSave: () => void;
+  species?: BioluminescentSpecies;
+  onSubmit: (draft: SpeciesDraft) => void;
 }
 
 type SectionKey = 'identity' | 'biolum' | 'depth' | 'habitat';
@@ -48,6 +43,7 @@ function Section({
   return (
     <div className="border border-white/10 rounded overflow-hidden">
       <button
+        type="button"
         onClick={onToggle}
         className="w-full flex items-center justify-between px-4 py-3.5 bg-white/[0.02] hover:bg-white/[0.04] transition-colors"
       >
@@ -59,9 +55,7 @@ function Section({
           >
             {done}/{total}
           </span>
-          <ChevronDown
-            className={`w-4 h-4 text-white/40 transition-transform ${expanded ? 'rotate-180' : ''}`}
-          />
+          <ChevronDown className={`w-4 h-4 text-white/40 transition-transform ${expanded ? 'rotate-180' : ''}`} />
         </div>
       </button>
       {expanded && <div className="p-4 space-y-4 border-t border-white/10">{children}</div>}
@@ -69,7 +63,8 @@ function Section({
   );
 }
 
-function VariantC({ draft, setDraft, mode, onSave }: VariantProps) {
+function SpeciesForm({ mode, species, onSubmit }: SpeciesFormProps) {
+  const [draft, setDraft] = useState<SpeciesDraft>(species ? draftFromSpecies(species) : emptyDraft);
   const accent = draft.lightColor || '#00E5FF';
   const [expanded, setExpanded] = useState<Record<SectionKey, boolean>>({
     identity: mode === 'create',
@@ -86,13 +81,13 @@ function VariantC({ draft, setDraft, mode, onSave }: VariantProps) {
   const totalDone = identityDone + biolumDone + depthDone + habitatDone;
 
   const handleSelect = (record: AphiaRecord) => {
-    setDraft({
-      ...draft,
+    setDraft((d) => ({
+      ...d,
       aphiaId: record.AphiaID,
       scientificname: record.scientificname,
       authority: record.authority,
       rank: record.rank,
-    });
+    }));
     setExpanded((e) => ({ ...e, identity: false, biolum: true }));
   };
 
@@ -115,9 +110,7 @@ function VariantC({ draft, setDraft, mode, onSave }: VariantProps) {
             onToggle={() => toggle('identity')}
             accent={accent}
           >
-            {mode === 'create' && !draft.scientificname ? (
-              <WormsSearchField onSelect={handleSelect} onSkip={() => {}} accent={accent} />
-            ) : null}
+            {mode === 'create' && !draft.scientificname && <WormsSearchField onSelect={handleSelect} accent={accent} />}
             <div className="grid sm:grid-cols-2 gap-3">
               <Field label="Scientific name">
                 <TextInput value={draft.scientificname} onChange={(v) => setDraft({ ...draft, scientificname: v })} />
@@ -223,7 +216,7 @@ function VariantC({ draft, setDraft, mode, onSave }: VariantProps) {
         </div>
 
         <button
-          onClick={onSave}
+          onClick={() => onSubmit(draft)}
           className="mt-8 px-6 py-2.5 rounded font-medium text-[#0B1426] transition-opacity hover:opacity-90"
           style={{ backgroundColor: accent }}
         >
@@ -234,4 +227,4 @@ function VariantC({ draft, setDraft, mode, onSave }: VariantProps) {
   );
 }
 
-export default VariantC;
+export default SpeciesForm;
