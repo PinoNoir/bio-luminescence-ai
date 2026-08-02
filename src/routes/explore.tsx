@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { createFileRoute, useNavigate, Link } from '@tanstack/react-router';
 import { motion } from 'motion/react';
-import { Search, Grid3X3, List, Zap, Compass } from 'lucide-react';
+import { Search, Grid3X3, List, Zap, Compass, Plus } from 'lucide-react';
 import { mockSpecies } from '~/data';
 import { SpeciesCard } from '~/components';
 
@@ -59,9 +59,16 @@ function ExploreComponent() {
               Species
             </h1>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-              Discover the fascinating world of living light. From surface waters to the deepest abyss, 
+              Discover the fascinating world of living light. From surface waters to the deepest abyss,
               explore how marine organisms create their own illumination.
             </p>
+            <Link
+              to="/species/new"
+              className="inline-flex items-center gap-2 mt-6 px-4 py-2 bg-bio-blue/20 hover:bg-bio-blue/30 text-bio-blue rounded-lg transition-colors font-medium"
+            >
+              <Plus className="w-4 h-4" />
+              Add a species
+            </Link>
           </motion.div>
 
           {/* Search and Filters */}
