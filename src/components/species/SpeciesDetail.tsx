@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from '@tanstack/react-router';
-import { ArrowLeft, ChevronDown, ChevronUp, Pencil } from 'lucide-react';
+import { ArrowLeft, ChevronDown, ChevronUp, Pencil, Plus } from 'lucide-react';
 import { BioluminescentSpecies, Sighting } from '~/types';
 
 interface SpeciesDetailProps {
@@ -173,6 +173,15 @@ function SpeciesDetail({ species, sightings, onBack }: SpeciesDetailProps) {
                 <h2 className="text-xs uppercase tracking-widest text-white/40 font-data">
                   Sighting log — {sightings.length} {sightings.length === 1 ? 'entry' : 'entries'}
                 </h2>
+                <Link
+                  to="/sightings/new"
+                  search={{ speciesId: species.id }}
+                  className="inline-flex items-center gap-1.5 text-xs hover:opacity-80 transition-opacity"
+                  style={{ color: glow }}
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  Log a sighting
+                </Link>
               </div>
               {sightings.length === 0 ? (
                 <p className="text-sm text-white/40">No sightings logged yet for this species.</p>
