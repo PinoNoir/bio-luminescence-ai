@@ -1,4 +1,4 @@
-# Bio Glow
+# Marine Institute
 
 A web app for marine biologists to catalog bioluminescent and deepwater marine species and log new field sightings of them, with photo/data upload and a taxonomy backbone sourced from WoRMS.
 

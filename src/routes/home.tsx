@@ -42,9 +42,9 @@ function Home() {
               A living record of what glows in the dark
             </h1>
             <p className="mt-6 text-lg text-white/60 max-w-xl leading-relaxed">
-              Bio Glow is a working catalog of bioluminescent and deepwater species, built for
-              marine biologists to document what they find — taxonomy, light behavior, depth,
-              and every field sighting logged against it.
+              Marine Institute is a working catalog of bioluminescent and deepwater species,
+              built for marine biologists to document what they find — taxonomy, light
+              behavior, depth, and every field sighting logged against it.
             </p>
             <div className="flex flex-wrap items-center gap-4 mt-10">
               <Link
