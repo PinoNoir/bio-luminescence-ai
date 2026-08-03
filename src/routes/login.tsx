@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { createFileRoute, useNavigate, Link } from '@tanstack/react-router';
 import { useMutation } from '@tanstack/react-query';
 import { motion } from 'motion/react';
 import { Auth } from '~/components';
@@ -34,19 +34,19 @@ function LoginComp() {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.3 }}
-      className="min-h-screen bg-gradient-to-br from-deep-sea via-abyss to-ocean-deep flex items-center justify-center p-6"
+      className="min-h-screen bg-[#0B1426] flex items-center justify-center p-6"
     >
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2">
-            Welcome Back to{' '}
+          <h1 className="font-display text-3xl text-white mb-2">
+            Welcome back to{' '}
             <span className="text-bio-blue animate-bio-glow-subtle">
               Marine Institute
             </span>
           </h1>
-          <p className="text-gray-400">Continue your bioluminescent journey</p>
+          <p className="text-white/50">Sign in to log a sighting or manage your entries</p>
         </div>
-        
+
         <Auth
           actionText="Sign In"
           status={loginMutation.status}
@@ -69,15 +69,11 @@ function LoginComp() {
               </motion.div>
             ) : (
               <div className="text-center">
-                <p className="text-gray-400 text-sm">
+                <p className="text-white/50 text-sm">
                   Don't have an account?{' '}
-                  <motion.a
-                    href="/signup"
-                    className="text-bio-blue hover:text-bio-cyan transition-colors font-medium"
-                    whileHover={{ scale: 1.05 }}
-                  >
+                  <Link to="/signup" className="text-bio-blue hover:text-bio-cyan transition-colors font-medium">
                     Sign up here
-                  </motion.a>
+                  </Link>
                 </p>
               </div>
             )

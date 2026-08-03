@@ -1,60 +1,63 @@
-function Auth({
-    actionText,
-    onSubmit,
-    status,
-    afterSubmit,
-  }: {
-    actionText: string
-    onSubmit: (e: React.FormEvent<HTMLFormElement>) => void
-    status: 'pending' | 'idle' | 'success' | 'error'
-    afterSubmit?: React.ReactNode
-  }) {
-    return (
-      <div className="fixed inset-0 bg-white dark:bg-black flex items-start justify-center p-8">
-        <div className="bg-white dark:bg-gray-900 p-8 rounded-lg shadow-lg">
-          <h1 className="text-2xl font-bold mb-4">{actionText}</h1>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault()
-              onSubmit(e)
-            }}
-            className="space-y-4"
-          >
-            <div>
-              <label htmlFor="email" className="block text-xs">
-                Username
-              </label>
-              <input
-                type="email"
-                name="email"
-                id="email"
-                className="px-2 py-1 w-full rounded border border-gray-500/20 bg-white dark:bg-gray-800"
-              />
-            </div>
-            <div>
-              <label htmlFor="password" className="block text-xs">
-                Password
-              </label>
-              <input
-                type="password"
-                name="password"
-                id="password"
-                className="px-2 py-1 w-full rounded border border-gray-500/20 bg-white dark:bg-gray-800"
-              />
-            </div>
-            <button
-              type="submit"
-              className="w-full bg-cyan-600 text-white rounded py-2 font-black uppercase"
-              disabled={status === 'pending'}
-            >
-              {status === 'pending' ? '...' : actionText}
-            </button>
-            {afterSubmit ? afterSubmit : null}
-          </form>
-        </div>
-      </div>
-    )
-  }
+const inputClass =
+  'w-full bg-white/5 border border-white/10 rounded px-3 py-2.5 text-white placeholder:text-white/30 focus:outline-none focus:border-bio-blue/60 transition-colors';
 
-  export default Auth;
-  
+function Auth({
+  actionText,
+  onSubmit,
+  status,
+  afterSubmit,
+}: {
+  actionText: string
+  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void
+  status: 'pending' | 'idle' | 'success' | 'error'
+  afterSubmit?: React.ReactNode
+}) {
+  return (
+    <div className="bg-white/5 border border-white/10 rounded-lg p-8">
+      <form
+        onSubmit={(e) => {
+          e.preventDefault()
+          onSubmit(e)
+        }}
+        className="space-y-5"
+      >
+        <div>
+          <label htmlFor="email" className="block text-xs uppercase tracking-widest font-data text-white/40 mb-1.5">
+            Email
+          </label>
+          <input
+            type="email"
+            name="email"
+            id="email"
+            autoComplete="email"
+            required
+            className={inputClass}
+          />
+        </div>
+        <div>
+          <label htmlFor="password" className="block text-xs uppercase tracking-widest font-data text-white/40 mb-1.5">
+            Password
+          </label>
+          <input
+            type="password"
+            name="password"
+            id="password"
+            autoComplete="current-password"
+            required
+            className={inputClass}
+          />
+        </div>
+        <button
+          type="submit"
+          disabled={status === 'pending'}
+          className="w-full px-6 py-3 rounded font-medium text-[#0B1426] bg-bio-blue transition-opacity hover:opacity-90 disabled:opacity-50"
+        >
+          {status === 'pending' ? 'Working…' : actionText}
+        </button>
+        {afterSubmit ? afterSubmit : null}
+      </form>
+    </div>
+  )
+}
+
+export default Auth;

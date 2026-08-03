@@ -30,6 +30,7 @@ A deployed, portfolio-quality web app where marine biologists browse a biolumine
 - [Sighting entry form UI](./issues/13-sighting-entry-form-ui.md) — "Sighting Card Preview" layout wins (of 3 prototyped), with a fixed cyan/blue accent instead of per-species color; folded into `SightingForm.tsx` + a real `/sightings/new` route, wired from the Species detail page (pre-filled) and the home page CTA. Species picker searches the local catalog, not WoRMS. Real browser geolocation, not mocked. Full 3-variant prototype preserved on `throwaway/sighting-form-prototype-2026-08-02`.
 - [Species catalog/listing design](./issues/14-species-catalog-listing-design.md) — merged hybrid of two liked variants: depth-zone sections (Sunlight/Twilight/Midnight) containing dense monospace table rows. Replaces the old default-styled grid/list Explore page, drops `SpeciesCard` (and its backdrop-blur perf cost) from this route. _(Resolved on `feat/species-catalog-redesign`, PR #8 — not yet merged to main.)_
 - [Rebrand: Bio Glow → Marine Institute](./issues/15-rebrand-marine-institute.md) — full rename (nav, page title, home/login/signup copy, `CONTEXT.md`, `CLAUDE.md`) plus a new custom SVG logo mark (`Logo.tsx`) — a specimen-frame corner-bracket outline with a glow dot, tied to the app's own established visual language instead of a generic stock icon. Repo name and `package.json` left unchanged (structural, not user-facing branding).
+- [Auth UX polish](./issues/16-auth-ux-polish.md) — rebuilt `Auth.tsx` (dropped the `fixed inset-0` overlay that hid the login/signup headings, restyled to match the established card/input language) and fixed `login.tsx`/`signup.tsx` headings to `font-display`. Also fixed a real bug found along the way: the sign-in/sign-up cross-links used `<a href>` (full page reload) instead of TanStack's `Link`.
 
 ## Not yet specified
 
@@ -42,7 +43,7 @@ A deployed, portfolio-quality web app where marine biologists browse a biolumine
 - How the existing routes (`explore`, `ocean`, `search`, `profile`, `settings`) map onto the new Species + Sighting model — likely `explore`/`search` become Species/Sighting listings and `profile` shows a scientist's own Sightings, but this isn't decided.
 - Demo data seeding strategy so the deployed portfolio site looks populated on first visit (real WoRMS-sourced species vs curated sample set, sample Sightings).
 - Deployment automation (GitHub Actions or manual) for both the Supabase migrations and the AWS frontend deploy.
-- Auth UX polish — the existing `Auth.tsx` form is unstyled scaffolding, not portfolio-quality yet.
+- The reference "Marine Institute" design image (light card, real photography, editorial serif/sans, blue accent) and how/whether it relates to the dark abyss + specimen-card system used everywhere so far — explicitly parked while reacting to ticket 14; still undecided.
 
 ## Out of scope
 
