@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link } from '@tanstack/react-router';
 import { ArrowLeft, ChevronDown, ChevronUp, Pencil, Plus } from 'lucide-react';
 import { BioluminescentSpecies, Sighting } from '~/types';
+import { useSpeciesImages } from '~/hooks';
 
 interface SpeciesDetailProps {
   species: BioluminescentSpecies;
@@ -22,6 +23,10 @@ function SpeciesDetail({ species, sightings, onBack }: SpeciesDetailProps) {
   const [showFullFacts, setShowFullFacts] = useState(false);
   const glow = species.lightColor || '#00E5FF';
   const visibleFacts = species.funFacts.slice(0, showFullFacts ? undefined : 4);
+  // species.imageUrl (a real uploaded photo, ticket 07) takes priority once
+  // that exists; until then, fall back to the fetched real-world photo.
+  const { bestImage, isLoading: imageLoading } = useSpeciesImages(species);
+  const photoUrl = species.imageUrl || bestImage?.url;
 
   return (
     <div className="min-h-screen bg-[#0B1426] pt-28 pb-24 px-6">
@@ -66,16 +71,16 @@ function SpeciesDetail({ species, sightings, onBack }: SpeciesDetailProps) {
                   />
                 ),
               )}
-              {species.imageUrl ? (
+              {!imageLoading && photoUrl ? (
                 <img
-                  src={species.imageUrl}
+                  src={photoUrl}
                   alt={species.commonName}
                   className="w-full h-full object-cover"
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#0d1b2a] to-[#1a2332]">
                   <div
-                    className="w-16 h-16 rounded-full animate-bio-pulse"
+                    className={`w-16 h-16 rounded-full ${imageLoading ? 'animate-pulse' : 'animate-bio-pulse'}`}
                     style={{ backgroundColor: glow, boxShadow: `0 0 40px ${glow}` }}
                   />
                 </div>
@@ -83,6 +88,11 @@ function SpeciesDetail({ species, sightings, onBack }: SpeciesDetailProps) {
               <div className="absolute bottom-2 right-2 text-[10px] font-data text-white/50 tracking-wider">
                 SPEC. {species.AphiaID}
               </div>
+              {!species.imageUrl && bestImage && (
+                <div className="absolute bottom-2 left-2 text-[10px] font-data text-white/50 tracking-wider">
+                  via {bestImage.source}
+                </div>
+              )}
             </div>
 
             <div className="mt-6">

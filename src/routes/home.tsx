@@ -2,6 +2,7 @@ import { createFileRoute, useNavigate, Link } from '@tanstack/react-router';
 import { SpeciesCard } from '~/components';
 import { BioluminescentSpecies } from '~/types';
 import { mockSpecies, mockSightings } from '~/data';
+import { useSpeciesImages } from '~/hooks';
 
 export const Route = createFileRoute('/home')({
   component: Home,
@@ -14,6 +15,7 @@ const HERO_SPECIES = mockSpecies.find((s) => s.scientificname === 'Atolla wyvill
 function Home() {
   const navigate = useNavigate();
   const heroGlow = HERO_SPECIES.lightColor || '#00E5FF';
+  const { bestImage: heroImage, isLoading: heroImageLoading } = useSpeciesImages(HERO_SPECIES);
 
   const handleSpeciesClick = (species: BioluminescentSpecies) => {
     navigate({ to: '/species/$speciesId', params: { speciesId: species.id } });
@@ -87,12 +89,21 @@ function Home() {
                   />
                 ),
               )}
-              <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#0d1b2a] to-[#1a2332] transition-transform duration-500 group-hover:scale-[1.02]">
-                <div
-                  className="w-20 h-20 rounded-full animate-bio-pulse"
-                  style={{ backgroundColor: heroGlow, boxShadow: `0 0 50px ${heroGlow}` }}
-                />
+              <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#0d1b2a] to-[#1a2332] overflow-hidden transition-transform duration-500 group-hover:scale-[1.02]">
+                {!heroImageLoading && heroImage ? (
+                  <img src={heroImage.url} alt={HERO_SPECIES.commonName} className="w-full h-full object-cover" />
+                ) : (
+                  <div
+                    className={`w-20 h-20 rounded-full ${heroImageLoading ? 'animate-pulse' : 'animate-bio-pulse'}`}
+                    style={{ backgroundColor: heroGlow, boxShadow: `0 0 50px ${heroGlow}` }}
+                  />
+                )}
               </div>
+              {!heroImageLoading && heroImage && (
+                <div className="absolute bottom-2 left-2 text-[10px] font-data text-white/50 tracking-wider">
+                  via {heroImage.source}
+                </div>
+              )}
             </div>
             <p className="mt-4 text-xs uppercase tracking-widest text-white/30 font-data">
               Featured specimen
