@@ -3,6 +3,7 @@ import { createFileRoute, useNavigate, Link } from '@tanstack/react-router';
 import { Search, Plus } from 'lucide-react';
 import { mockSpecies } from '~/data';
 import { BioluminescentSpecies } from '~/types';
+import { useSpeciesImages } from '~/hooks';
 
 export const Route = createFileRoute('/explore')({
   component: ExploreComponent,
@@ -35,6 +36,34 @@ const ZONES = [
 ] as const;
 
 const selectClass = 'bg-white/5 border border-white/10 rounded px-3 py-2.5 text-white text-sm focus:outline-none appearance-none';
+
+// A real photo when one's actually found (Wikipedia, occasionally GBIF —
+// see speciesImages.ts), otherwise the glow-dot treatment used everywhere
+// else in the app when no photo exists. Never shows a generic stock photo
+// pretending to be the species.
+function SpeciesThumbnail({ species }: { species: BioluminescentSpecies }) {
+  const { bestImage, isLoading } = useSpeciesImages(species);
+
+  if (!isLoading && bestImage) {
+    return (
+      <img
+        src={bestImage.url}
+        alt={species.commonName}
+        className="w-9 h-9 rounded-full object-cover flex-shrink-0 border"
+        style={{ borderColor: `${species.lightColor}55` }}
+      />
+    );
+  }
+
+  return (
+    <div className="w-9 h-9 rounded-full flex-shrink-0 flex items-center justify-center border border-white/10" style={{ backgroundColor: `${species.lightColor}0d` }}>
+      <span
+        className={`w-2 h-2 rounded-full ${isLoading ? 'animate-pulse' : ''}`}
+        style={{ backgroundColor: species.lightColor }}
+      />
+    </div>
+  );
+}
 
 function ExploreComponent() {
   const navigate = useNavigate();
@@ -125,7 +154,7 @@ function ExploreComponent() {
                     className="w-full grid grid-cols-[2fr_1fr_1fr_100px] gap-4 px-4 py-3 items-center text-left border-b border-white/5 last:border-b-0 hover:bg-white/[0.04] transition-colors group"
                   >
                     <div className="flex items-center gap-3 min-w-0">
-                      <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: s.lightColor }} />
+                      <SpeciesThumbnail species={s} />
                       <div className="min-w-0">
                         <p className="text-white truncate group-hover:underline">{s.commonName}</p>
                         <p className="italic text-white/40 font-display text-sm truncate">{s.scientificname}</p>
