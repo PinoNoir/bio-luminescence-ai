@@ -1,4 +1,6 @@
-# Bio Glow: species catalog + sighting CRUD
+# Marine Institute: species catalog + sighting CRUD
+
+_(Effort renamed from "Bio Glow" per ticket 15 — the `.scratch/bio-glow/` directory and ticket file paths are unchanged; only user-facing branding was in scope for the rename.)_
 
 ## Destination
 
@@ -26,6 +28,8 @@ A deployed, portfolio-quality web app where marine biologists browse a biolumine
 - [Species entry form UI](./issues/11-species-entry-form-ui.md) — "Field Log Checklist" layout wins (of 3 prototyped); folded into `SpeciesForm.tsx` + real `/species/new` and `/species/$speciesId/edit` routes, wired from Explore and the Species detail page. Along the way, fixed every WoRMS endpoint in `worms.ts` (all were hitting non-existent URLs — the search feature had never worked) and removed the dead heuristic-guessing code ticket 09 had flagged. Full 3-variant prototype preserved on `throwaway/species-form-prototype-2026-08-01`.
 - [Home page redesign and scroll performance](./issues/12-home-page-redesign.md) — root-caused sluggish scrolling to ~30+ simultaneous `backdrop-blur-sm` instances from rendering 8 `SpeciesCard`s + 3 `ModuleCard`s at once; cut that by dropping the out-of-scope Learning Modules section and trimming featured species to 3. Rewrote the page in the Fraunces/Inter/IBM Plex Mono + specimen-card language from tickets 10/11 (it had never been updated), with real computed stats instead of fabricated marketing numbers.
 - [Sighting entry form UI](./issues/13-sighting-entry-form-ui.md) — "Sighting Card Preview" layout wins (of 3 prototyped), with a fixed cyan/blue accent instead of per-species color; folded into `SightingForm.tsx` + a real `/sightings/new` route, wired from the Species detail page (pre-filled) and the home page CTA. Species picker searches the local catalog, not WoRMS. Real browser geolocation, not mocked. Full 3-variant prototype preserved on `throwaway/sighting-form-prototype-2026-08-02`.
+- [Species catalog/listing design](./issues/14-species-catalog-listing-design.md) — merged hybrid of two liked variants: depth-zone sections (Sunlight/Twilight/Midnight) containing dense monospace table rows. Replaces the old default-styled grid/list Explore page, drops `SpeciesCard` (and its backdrop-blur perf cost) from this route. _(Resolved on `feat/species-catalog-redesign`, PR #8 — not yet merged to main.)_
+- [Rebrand: Bio Glow → Marine Institute](./issues/15-rebrand-marine-institute.md) — full rename (nav, page title, home/login/signup copy, `CONTEXT.md`, `CLAUDE.md`) plus a new custom SVG logo mark (`Logo.tsx`) — a specimen-frame corner-bracket outline with a glow dot, tied to the app's own established visual language instead of a generic stock icon. Repo name and `package.json` left unchanged (structural, not user-facing branding).
 
 ## Not yet specified
 

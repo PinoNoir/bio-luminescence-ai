@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-"Bio Glow" — a React SPA for exploring bioluminescent marine species: species browsing/search, guided learning modules, a 3D ocean view, and user accounts/progress tracking. Species taxonomy data is sourced from the public WoRMS API; app data (species records, learning modules, user progress) is meant to live in Supabase, though most routes currently render from local mock data (`src/data/`) rather than live queries.
+"Marine Institute" — a React SPA for exploring bioluminescent marine species: species browsing/search, guided learning modules, a 3D ocean view, and user accounts/progress tracking. Species taxonomy data is sourced from the public WoRMS API; app data (species records, learning modules, user progress) is meant to live in Supabase, though most routes currently render from local mock data (`src/data/`) rather than live queries.
 
 ## Commands
 

@@ -41,7 +41,7 @@ function LoginComp() {
           <h1 className="text-3xl font-bold text-white mb-2">
             Welcome Back to{' '}
             <span className="text-bio-blue animate-bio-glow-subtle">
-              Bio Glow
+              Marine Institute
             </span>
           </h1>
           <p className="text-gray-400">Continue your bioluminescent journey</p>

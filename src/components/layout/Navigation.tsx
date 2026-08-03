@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from '@tanstack/react-router';
-import { 
-  Home, 
-  User, 
+import {
+  Home,
+  User,
   Menu,
   X,
-  Zap,
   Search,
   Compass,
   BookOpen,
@@ -14,6 +13,7 @@ import {
 } from 'lucide-react';
 import { cn } from '~/lib/utils';
 import { useAuth } from '~/hooks/useAuth';
+import Logo from './Logo';
 
 const navigationItems = [
   {
@@ -91,11 +91,8 @@ function Navigation() {
             <div 
               className="flex items-center space-x-3"
             >
-              <div className="relative">
-                <Zap className="w-8 h-8 text-bio-blue" />
-                <div className="absolute inset-0 w-8 h-8 bg-bio-blue/20 rounded-full blur-lg animate-bio-pulse" />
-              </div>
-              <span className="text-xl font-bold text-white">Bio Glow</span>
+              <Logo className="w-8 h-8 text-bio-blue" />
+              <span className="text-xl font-bold text-white">Marine Institute</span>
             </div>
             
             {/* Main Navigation */}
@@ -192,11 +189,8 @@ function Navigation() {
           <div className="flex items-center justify-between h-16 px-4">
             {/* Logo */}
             <div className="flex items-center space-x-3">
-              <div className="relative">
-                <Zap className="w-6 h-6 text-bio-blue" />
-                <div className="absolute inset-0 w-6 h-6 bg-bio-blue/20 rounded-full blur-lg" />
-              </div>
-              <span className="text-lg font-bold text-white">Bio Glow</span>
+              <Logo className="w-6 h-6 text-bio-blue" glowClassName="w-6 h-6" />
+              <span className="text-lg font-bold text-white">Marine Institute</span>
             </div>
             
             {/* Menu Toggle */}
