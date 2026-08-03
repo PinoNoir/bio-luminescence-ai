@@ -8,12 +8,6 @@ interface ImageSource {
   source: string;
 }
 
-interface ImageSearchResult {
-  images: ImageSource[];
-  total: number;
-  source: string;
-}
-
 // Multiple image sources for redundancy
 export class SpeciesImageService {
   private static readonly UNSPLASH_ACCESS_KEY = import.meta.env.VITE_UNSPLASH_ACCESS_KEY;
@@ -22,13 +16,20 @@ export class SpeciesImageService {
   // Primary method to get species images
   static async getSpeciesImages(species: BioluminescentSpecies): Promise<ImageSource[]> {
     try {
-      // Try multiple sources in order of preference
+      // Try multiple sources in order of preference. Wikipedia goes first —
+      // verified against all 8 mock species: correctly-matched photos for
+      // 6/8, CORS-enabled (Access-Control-Allow-Origin: *), no API key
+      // needed. GBIF only has media for a minority of species (1/8 in the
+      // same check) but costs nothing to also try. EOL and a generic
+      // "fallback" stock photo were removed — EOL's classic API returns
+      // zero images for every species tested (a dead API, not a CORS
+      // artifact), and a fallback that shows an unrelated ocean-wave photo
+      // is actively misleading, worse than showing no photo at all.
       const sources = [
-        () => this.getEOLImages(species),
+        () => this.getWikipediaImage(species),
         () => this.getGBIFImages(species),
         () => this.getUnsplashImages(species),
         () => this.getPexelsImages(species),
-        () => this.getFallbackImages(species)
       ];
 
       for (const source of sources) {
@@ -50,40 +51,35 @@ export class SpeciesImageService {
     }
   }
 
-  // Encyclopedia of Life API (Free, high-quality)
-  private static async getEOLImages(species: BioluminescentSpecies): Promise<ImageSource[]> {
+  // Wikipedia REST API summary endpoint — CORS-enabled, no key required.
+  // Returns at most one image (the article's lead photo), but it's
+  // reliably the correct species.
+  private static async getWikipediaImage(species: BioluminescentSpecies): Promise<ImageSource[]> {
     try {
-      // Search EOL by scientific name
-      const searchUrl = `https://eol.org/api/search/1.0.json?q=${encodeURIComponent(species.scientificname)}&page=1&exact=true`;
-      const searchResponse = await fetch(searchUrl);
-      const searchData = await searchResponse.json();
+      const title = encodeURIComponent(species.scientificname);
+      const response = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${title}`);
 
-      if (!searchData.results || searchData.results.length === 0) {
+      if (!response.ok) {
         return [];
       }
 
-      const eolId = searchData.results[0].id;
-      
-      // Get images for the species
-      const imagesUrl = `https://eol.org/api/pages/1.0/${eolId}.json?images=1&videos=0&sounds=0&maps=0&text=0&iucn=false&subjects=overview&licenses=all&details=true&common_names=0&synonyms=0&references=0&vetted=0`;
-      const imagesResponse = await fetch(imagesUrl);
-      const imagesData = await imagesResponse.json();
+      const data = await response.json();
+      const thumbnail = data.thumbnail?.source || data.originalimage?.source;
 
-      if (!imagesData.dataObjects) {
+      if (!thumbnail) {
         return [];
       }
 
-      return imagesData.dataObjects
-        .filter((obj: any) => obj.dataType === 'http://purl.org/dc/dcmitype/StillImage')
-        .map((obj: any) => ({
-          url: obj.contentURL || obj.eolThumbnailURL,
-          license: obj.license || 'Unknown',
-          author: obj.rightsHolder || 'Unknown',
-          source: 'Encyclopedia of Life'
-        }))
-        .slice(0, 5); // Limit to 5 images
+      return [
+        {
+          url: thumbnail,
+          license: 'See Wikipedia article for license',
+          author: 'Wikipedia contributors',
+          source: 'Wikipedia',
+        },
+      ];
     } catch (error) {
-      console.warn('EOL API failed:', error);
+      console.warn('Wikipedia API failed:', error);
       return [];
     }
   }
@@ -141,7 +137,7 @@ export class SpeciesImageService {
 
       const searchTerm = searchTerms[0] || 'marine biology';
       const searchUrl = `https://api.unsplash.com/search/photos?query=${encodeURIComponent(searchTerm)}&orientation=landscape&per_page=5`;
-      
+
       const response = await fetch(searchUrl, {
         headers: {
           'Authorization': `Client-ID ${this.UNSPLASH_ACCESS_KEY}`
@@ -175,7 +171,7 @@ export class SpeciesImageService {
     try {
       const searchTerm = species.commonName || species.scientificname;
       const searchUrl = `https://api.pexels.com/v1/search?query=${encodeURIComponent(searchTerm)}&per_page=5`;
-      
+
       const response = await fetch(searchUrl, {
         headers: {
           'Authorization': this.PEXELS_API_KEY
@@ -200,27 +196,6 @@ export class SpeciesImageService {
     }
   }
 
-  // Fallback to curated marine images
-  private static async getFallbackImages(species: BioluminescentSpecies): Promise<ImageSource[]> {
-    // Curated collection of marine life images
-    const fallbackImages = [
-      {
-        url: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800',
-        license: 'Unsplash',
-        author: 'Unsplash',
-        source: 'Fallback'
-      },
-      {
-        url: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800',
-        license: 'Unsplash',
-        author: 'Unsplash',
-        source: 'Fallback'
-      }
-    ];
-
-    return fallbackImages;
-  }
-
   // Get a single best image for a species
   static async getBestSpeciesImage(species: BioluminescentSpecies): Promise<ImageSource | null> {
     const images = await this.getSpeciesImages(species);
@@ -239,11 +214,11 @@ export class SpeciesImageService {
 }
 
 // Convenience functions
-export const getSpeciesImages = (species: BioluminescentSpecies) => 
+export const getSpeciesImages = (species: BioluminescentSpecies) =>
   SpeciesImageService.getSpeciesImages(species);
 
-export const getBestSpeciesImage = (species: BioluminescentSpecies) => 
+export const getBestSpeciesImage = (species: BioluminescentSpecies) =>
   SpeciesImageService.getBestSpeciesImage(species);
 
-export const searchImagesByScientificName = (scientificName: string) => 
+export const searchImagesByScientificName = (scientificName: string) =>
   SpeciesImageService.searchImagesByScientificName(scientificName);
