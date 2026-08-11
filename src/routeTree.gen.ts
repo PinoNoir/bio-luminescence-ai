@@ -21,7 +21,6 @@ import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as OceanRouteImport } from './routes/ocean'
 import { Route as LogoutRouteImport } from './routes/logout'
 import { Route as LoginRouteImport } from './routes/login'
-import { Route as LearnRouteImport } from './routes/learn'
 import { Route as HomeRouteImport } from './routes/home'
 import { Route as ExploreRouteImport } from './routes/explore'
 import { Route as IndexRouteImport } from './routes/index'
@@ -86,11 +85,6 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
-const LearnRoute = LearnRouteImport.update({
-  id: '/learn',
-  path: '/learn',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const HomeRoute = HomeRouteImport.update({
   id: '/home',
   path: '/home',
@@ -111,7 +105,6 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/explore': typeof ExploreRoute
   '/home': typeof HomeRoute
-  '/learn': typeof LearnRoute
   '/login': typeof LoginRoute
   '/logout': typeof LogoutRoute
   '/ocean': typeof OceanRoute
@@ -129,7 +122,6 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/explore': typeof ExploreRoute
   '/home': typeof HomeRoute
-  '/learn': typeof LearnRoute
   '/login': typeof LoginRoute
   '/logout': typeof LogoutRoute
   '/ocean': typeof OceanRoute
@@ -148,7 +140,6 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/explore': typeof ExploreRoute
   '/home': typeof HomeRoute
-  '/learn': typeof LearnRoute
   '/login': typeof LoginRoute
   '/logout': typeof LogoutRoute
   '/ocean': typeof OceanRoute
@@ -168,7 +159,6 @@ export interface FileRouteTypes {
     | '/'
     | '/explore'
     | '/home'
-    | '/learn'
     | '/login'
     | '/logout'
     | '/ocean'
@@ -186,7 +176,6 @@ export interface FileRouteTypes {
     | '/'
     | '/explore'
     | '/home'
-    | '/learn'
     | '/login'
     | '/logout'
     | '/ocean'
@@ -204,7 +193,6 @@ export interface FileRouteTypes {
     | '/'
     | '/explore'
     | '/home'
-    | '/learn'
     | '/login'
     | '/logout'
     | '/ocean'
@@ -223,7 +211,6 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ExploreRoute: typeof ExploreRoute
   HomeRoute: typeof HomeRoute
-  LearnRoute: typeof LearnRoute
   LoginRoute: typeof LoginRoute
   LogoutRoute: typeof LogoutRoute
   OceanRoute: typeof OceanRoute
@@ -324,13 +311,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/learn': {
-      id: '/learn'
-      path: '/learn'
-      fullPath: '/learn'
-      preLoaderRoute: typeof LearnRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/home': {
       id: '/home'
       path: '/home'
@@ -359,7 +339,6 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ExploreRoute: ExploreRoute,
   HomeRoute: HomeRoute,
-  LearnRoute: LearnRoute,
   LoginRoute: LoginRoute,
   LogoutRoute: LogoutRoute,
   OceanRoute: OceanRoute,

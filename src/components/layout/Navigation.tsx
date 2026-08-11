@@ -7,7 +7,6 @@ import {
   X,
   Search,
   Compass,
-  BookOpen,
   Waves,
   Settings
 } from 'lucide-react';
@@ -28,13 +27,6 @@ const navigationItems = [
     label: 'Explore',
     href: '/explore',
     icon: Compass,
-    depth: 0
-  },
-  {
-    id: 'learn',
-    label: 'Learn',
-    href: '/learn',
-    icon: BookOpen,
     depth: 0
   },
   {
