@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SightingsSightingIdEditRouteImport } from './routes/sightings.$sightingId.edit'
 import { Route as SightingsNewRouteImport } from './routes/sightings.new'
 import { Route as SpeciesNewRouteImport } from './routes/species.new'
 import { Route as SpeciesSpeciesIdEditRouteImport } from './routes/species.$speciesId.edit'
@@ -25,6 +26,11 @@ import { Route as HomeRouteImport } from './routes/home'
 import { Route as ExploreRouteImport } from './routes/explore'
 import { Route as IndexRouteImport } from './routes/index'
 
+const SightingsSightingIdEditRoute = SightingsSightingIdEditRouteImport.update({
+  id: '/sightings/$sightingId/edit',
+  path: '/sightings/$sightingId/edit',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SightingsNewRoute = SightingsNewRouteImport.update({
   id: '/sightings/new',
   path: '/sightings/new',
@@ -111,6 +117,7 @@ export interface FileRoutesByFullPath {
   '/ocean': typeof OceanRoute
   '/profile': typeof ProfileRoute
   '/sightings/new': typeof SightingsNewRoute
+  '/sightings/$sightingId/edit': typeof SightingsSightingIdEditRoute
   '/species/new': typeof SpeciesNewRoute
   '/species/$speciesId/edit': typeof SpeciesSpeciesIdEditRoute
   '/species/$speciesId': typeof SpeciesSpeciesIdRoute
@@ -128,6 +135,7 @@ export interface FileRoutesByTo {
   '/ocean': typeof OceanRoute
   '/profile': typeof ProfileRoute
   '/sightings/new': typeof SightingsNewRoute
+  '/sightings/$sightingId/edit': typeof SightingsSightingIdEditRoute
   '/species/new': typeof SpeciesNewRoute
   '/species/$speciesId/edit': typeof SpeciesSpeciesIdEditRoute
   '/species/$speciesId': typeof SpeciesSpeciesIdRoute
@@ -146,6 +154,7 @@ export interface FileRoutesById {
   '/ocean': typeof OceanRoute
   '/profile': typeof ProfileRoute
   '/sightings/new': typeof SightingsNewRoute
+  '/sightings/$sightingId/edit': typeof SightingsSightingIdEditRoute
   '/species/new': typeof SpeciesNewRoute
   '/species/$speciesId/edit': typeof SpeciesSpeciesIdEditRoute
   '/species/$speciesId': typeof SpeciesSpeciesIdRoute
@@ -165,6 +174,7 @@ export interface FileRouteTypes {
     | '/ocean'
     | '/profile'
     | '/sightings/new'
+    | '/sightings/$sightingId/edit'
     | '/species/new'
     | '/species/$speciesId/edit'
     | '/species/$speciesId'
@@ -182,6 +192,7 @@ export interface FileRouteTypes {
     | '/ocean'
     | '/profile'
     | '/sightings/new'
+    | '/sightings/$sightingId/edit'
     | '/species/new'
     | '/species/$speciesId/edit'
     | '/species/$speciesId'
@@ -199,6 +210,7 @@ export interface FileRouteTypes {
     | '/ocean'
     | '/profile'
     | '/sightings/new'
+    | '/sightings/$sightingId/edit'
     | '/species/new'
     | '/species/$speciesId/edit'
     | '/species/$speciesId'
@@ -217,6 +229,7 @@ export interface RootRouteChildren {
   OceanRoute: typeof OceanRoute
   ProfileRoute: typeof ProfileRoute
   SightingsNewRoute: typeof SightingsNewRoute
+  SightingsSightingIdEditRoute: typeof SightingsSightingIdEditRoute
   SpeciesNewRoute: typeof SpeciesNewRoute
   SpeciesSpeciesIdEditRoute: typeof SpeciesSpeciesIdEditRoute
   SpeciesSpeciesIdRoute: typeof SpeciesSpeciesIdRoute
@@ -253,6 +266,13 @@ declare module '@tanstack/react-router' {
       path: '/profile'
       fullPath: '/profile'
       preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sightings/$sightingId/edit': {
+      id: '/sightings/$sightingId/edit'
+      path: '/sightings/$sightingId/edit'
+      fullPath: '/sightings/$sightingId/edit'
+      preLoaderRoute: typeof SightingsSightingIdEditRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/sightings/new': {
@@ -345,6 +365,7 @@ const rootRouteChildren: RootRouteChildren = {
   OceanRoute: OceanRoute,
   ProfileRoute: ProfileRoute,
   SightingsNewRoute: SightingsNewRoute,
+  SightingsSightingIdEditRoute: SightingsSightingIdEditRoute,
   SpeciesNewRoute: SpeciesNewRoute,
   SpeciesSpeciesIdEditRoute: SpeciesSpeciesIdEditRoute,
   SpeciesSpeciesIdRoute: SpeciesSpeciesIdRoute,

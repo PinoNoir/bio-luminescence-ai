@@ -200,12 +200,23 @@ function SpeciesDetail({ species, sightings, onBack }: SpeciesDetailProps) {
                   {sightings.map((s) => (
                     <div
                       key={s.id}
-                      className="grid grid-cols-[90px_70px_1fr_110px] gap-4 py-3 border-b border-white/5 text-sm font-data"
+                      className="group grid grid-cols-[90px_70px_1fr_110px] gap-4 py-3 border-b border-white/5 text-sm font-data items-center"
                     >
                       <span className="text-white/50">{s.sightedAt}</span>
                       <span style={{ color: glow }}>{s.depthM}m</span>
                       <span className="text-white/80 truncate">{s.location}</span>
-                      <span className="text-white/40 text-right truncate">{s.submittedBy}</span>
+                      <div className="flex items-center justify-end gap-2 min-w-0">
+                        <span className="text-white/40 truncate">{s.submittedBy}</span>
+                        <Link
+                          to="/sightings/$sightingId/edit"
+                          params={{ sightingId: s.id }}
+                          className="flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                          style={{ color: glow }}
+                          aria-label="Edit sighting"
+                        >
+                          <Pencil className="w-3.5 h-3.5" />
+                        </Link>
+                      </div>
                     </div>
                   ))}
                 </div>

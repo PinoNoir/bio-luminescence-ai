@@ -130,12 +130,12 @@ function ExploreComponent() {
           {results.length} of {mockSpecies.length} species
         </p>
 
-        <div className="space-y-1 -mx-4">
+        <div className="flex flex-col gap-4 mx-4">
           {ZONES.map((zone) => {
             const zoneSpecies = results.filter((s) => s.depthRange.zone === zone.key);
             if (zoneSpecies.length === 0) return null;
             return (
-              <div key={zone.key} style={{ backgroundColor: zone.bg }} className="rounded-lg py-4 px-4">
+              <div key={zone.key} style={{ backgroundColor: zone.bg }} className="scroll-reveal rounded-lg py-4 px-4">
                 <div className="flex items-baseline justify-between px-4 mb-1">
                   <h2 className="font-display text-xl text-white">{zone.label}</h2>
                   <span className="text-xs font-data text-white/40">{zone.range}</span>
