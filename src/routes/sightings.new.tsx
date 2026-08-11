@@ -27,6 +27,7 @@ function NewSightingPage() {
 
   return (
     <SightingForm
+      mode="create"
       initialSpecies={preselected ? { id: preselected.id, label: preselected.commonName } : undefined}
       onSubmit={handleSubmit}
     />

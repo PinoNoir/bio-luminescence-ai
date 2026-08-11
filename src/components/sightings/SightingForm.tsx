@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { MapPin, Calendar } from 'lucide-react';
-import { BioluminescentSpecies } from '~/types';
-import { SightingDraft, emptyDraft } from '~/lib/sightingForm';
+import { MapPin, Calendar, Trash2 } from 'lucide-react';
+import { BioluminescentSpecies, Sighting } from '~/types';
+import { SightingDraft, emptyDraft, draftFromSighting } from '~/lib/sightingForm';
 import SpeciesPicker from './SpeciesPicker';
 import { Field, NumberInput, TextInput, TextArea, UseMyLocationButton, PhotoAttach } from './sighting-form-fields';
 
@@ -10,8 +10,11 @@ import { Field, NumberInput, TextInput, TextArea, UseMyLocationButton, PhotoAtta
 const ACCENT = '#00E5FF';
 
 interface SightingFormProps {
+  mode: 'create' | 'edit';
   initialSpecies?: { id: string; label: string };
+  sighting?: Sighting;
   onSubmit: (draft: SightingDraft) => void;
+  onDelete?: () => void;
 }
 
 function SightingPreview({ draft }: { draft: SightingDraft }) {
@@ -26,11 +29,14 @@ function SightingPreview({ draft }: { draft: SightingDraft }) {
         <div className="space-y-2 text-sm font-data text-white/60">
           <div className="flex items-center gap-2">
             <MapPin className="w-3.5 h-3.5 text-white/30" />
-            <span>
-              {draft.latitude !== '' && draft.longitude !== '' ? `${draft.latitude}, ${draft.longitude}` : '—'}
-              {draft.depthM !== '' ? ` · ${draft.depthM}m` : ''}
-            </span>
+            <span>{draft.location || '—'}</span>
           </div>
+          {draft.latitude !== '' && draft.longitude !== '' && (
+            <div className="pl-5 text-xs text-white/40">
+              {draft.latitude}, {draft.longitude}
+              {draft.depthM !== '' ? ` · ${draft.depthM}m` : ''}
+            </div>
+          )}
           <div className="flex items-center gap-2">
             <Calendar className="w-3.5 h-3.5 text-white/30" />
             <span>{draft.sightedAt || '—'}</span>
@@ -43,10 +49,50 @@ function SightingPreview({ draft }: { draft: SightingDraft }) {
   );
 }
 
-function SightingForm({ initialSpecies, onSubmit }: SightingFormProps) {
-  const [draft, setDraft] = useState<SightingDraft>(
-    initialSpecies ? { ...emptyDraft, speciesId: initialSpecies.id, speciesLabel: initialSpecies.label } : emptyDraft,
+// Delete has no existing pattern anywhere in the app to mirror (no modal/dialog
+// component exists — Auth.tsx was rebuilt in ticket 16 specifically to drop an
+// overlay). An inline two-step confirm keeps this to plain markup and reuses
+// the destructive-action styling already established in Navigation.tsx/settings.tsx
+// rather than introducing a new component or color.
+function DeleteSighting({ onDelete }: { onDelete: () => void }) {
+  const [confirming, setConfirming] = useState(false);
+
+  if (confirming) {
+    return (
+      <div className="flex items-center gap-3 text-sm">
+        <span className="text-white/50">Delete this sighting?</span>
+        <button
+          type="button"
+          onClick={onDelete}
+          className="px-3 py-1.5 rounded bg-red-600/20 hover:bg-red-600/30 text-red-400 font-medium transition-colors"
+        >
+          Confirm delete
+        </button>
+        <button type="button" onClick={() => setConfirming(false)} className="text-white/40 hover:text-white/70 transition-colors">
+          Cancel
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={() => setConfirming(true)}
+      className="inline-flex items-center gap-1.5 text-sm text-white/40 hover:text-red-400 transition-colors"
+    >
+      <Trash2 className="w-3.5 h-3.5" />
+      Delete sighting
+    </button>
   );
+}
+
+function SightingForm({ mode, initialSpecies, sighting, onSubmit, onDelete }: SightingFormProps) {
+  const [draft, setDraft] = useState<SightingDraft>(() => {
+    if (sighting) return draftFromSighting(sighting, initialSpecies?.label ?? '');
+    if (initialSpecies) return { ...emptyDraft, speciesId: initialSpecies.id, speciesLabel: initialSpecies.label };
+    return emptyDraft;
+  });
 
   const handleSelect = (species: BioluminescentSpecies) => {
     setDraft({ ...draft, speciesId: species.id, speciesLabel: species.commonName });
@@ -56,7 +102,7 @@ function SightingForm({ initialSpecies, onSubmit }: SightingFormProps) {
     <div className="min-h-screen bg-[#0B1426] pt-28 pb-24 px-6">
       <div className="max-w-5xl mx-auto grid md:grid-cols-[1fr_320px] gap-12">
         <div>
-          <h1 className="font-display text-3xl text-white mb-8">Log a sighting</h1>
+          <h1 className="font-display text-3xl text-white mb-8">{mode === 'create' ? 'Log a sighting' : 'Edit sighting'}</h1>
           <div className="space-y-6">
             <Field label="Species">
               {draft.speciesId ? (
@@ -69,6 +115,14 @@ function SightingForm({ initialSpecies, onSubmit }: SightingFormProps) {
               ) : (
                 <SpeciesPicker onSelect={handleSelect} accent={ACCENT} />
               )}
+            </Field>
+
+            <Field label="Location name">
+              <TextInput
+                value={draft.location}
+                onChange={(v) => setDraft({ ...draft, location: v })}
+                placeholder="e.g. Monterey Submarine Canyon"
+              />
             </Field>
 
             <UseMyLocationButton
@@ -99,8 +153,14 @@ function SightingForm({ initialSpecies, onSubmit }: SightingFormProps) {
             <PhotoAttach count={draft.photoCount} onChange={(n) => setDraft({ ...draft, photoCount: n })} accent={ACCENT} />
 
             <button onClick={() => onSubmit(draft)} className="px-6 py-2.5 rounded font-medium text-[#0B1426] transition-opacity hover:opacity-90" style={{ backgroundColor: ACCENT }}>
-              Log sighting
+              {mode === 'create' ? 'Log sighting' : 'Save changes'}
             </button>
+
+            {mode === 'edit' && onDelete && (
+              <div className="pt-4 mt-2 border-t border-white/10">
+                <DeleteSighting onDelete={onDelete} />
+              </div>
+            )}
           </div>
         </div>
 
